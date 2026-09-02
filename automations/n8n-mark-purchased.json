@@ -1,0 +1,43 @@
+{
+  "name": "Desafio Shape de Noiva — Marcar Compra (para parar os e-mails)",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "desafio-shape-noiva/compra",
+        "httpMethod": "POST",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "webhook-purchase",
+      "name": "Webhook - Compra Aprovada (Hotmart/Kiwify)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": "COLE_AQUI_O_ID_DA_SUA_PLANILHA",
+        "sheetName": "Leads",
+        "columnToMatchOn": "email",
+        "valueToMatchOn": "={{ $json.body.buyer_email || $json.body.email || $json.body.data?.buyer?.email }}",
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "comprou": "sim"
+          }
+        }
+      },
+      "id": "sheets-update",
+      "name": "Google Sheets - Marcar Comprou",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [220, 0]
+    }
+  ],
+  "connections": {
+    "Webhook - Compra Aprovada (Hotmart/Kiwify)": { "main": [[{ "node": "Google Sheets - Marcar Comprou", "type": "main", "index": 0 }]] }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" }
+}

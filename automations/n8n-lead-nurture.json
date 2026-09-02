@@ -1,0 +1,192 @@
+{
+  "name": "Desafio Shape de Noiva — Captura + Nutrição de Leads",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "desafio-shape-noiva/lead",
+        "httpMethod": "POST",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "webhook-lead",
+      "name": "Webhook - Novo Lead (Quiz)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": "COLE_AQUI_O_ID_DA_SUA_PLANILHA",
+        "sheetName": "Leads",
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{ $now.toISO() }}",
+            "nome": "={{ $json.body.nome }}",
+            "email": "={{ $json.body.email }}",
+            "whatsapp": "={{ $json.body.whats }}",
+            "perfil": "={{ $json.body.q1 }}",
+            "dor_principal": "={{ $json.body.q2 }}",
+            "comprou": "nao",
+            "emails_enviados": "1"
+          }
+        }
+      },
+      "id": "sheets-append",
+      "name": "Google Sheets - Salvar Lead",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "fromEmail": "contato@seudominio.com",
+        "toEmail": "={{ $json.body.email }}",
+        "subject": "Seu plano tá pronto, {{ $json.body.nome }} 💍 (+ uma dica pra hoje)",
+        "emailFormat": "html",
+        "html": "<p>Oi {{ $json.body.nome }},</p><p>Seu resultado no quiz já confirmou: o Desafio Shape de Noiva é o caminho certo pra você chegar no altar do jeito que sempre imaginou.</p><p>Antes de qualquer coisa, uma dica que já pode aplicar <strong>hoje</strong>, de graça:</p><blockquote>Beba 500ml de água morna com limão assim que acordar, antes do café. É o primeiro passo pra reduzir o inchaço — e foi exatamente com isso que a Semana 1 do Desafio começa.</blockquote><p>O plano completo — os 21 dias, o cardápio, os treinos e o Kit Anti-Ansiedade Pré-Casamento — está te esperando aqui:</p><p><a href=\"COLE_AQUI_O_LINK_DE_CHECKOUT\">Quero meu Desafio completo — R$47,90</a></p>",
+        "options": {}
+      },
+      "id": "email-1",
+      "name": "Enviar E-mail 1 (imediato)",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "amount": 24,
+        "unit": "hours"
+      },
+      "id": "wait-24h-1",
+      "name": "Esperar 24h",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "operation": "lookup",
+        "documentId": "COLE_AQUI_O_ID_DA_SUA_PLANILHA",
+        "sheetName": "Leads",
+        "lookupColumn": "email",
+        "lookupValue": "={{ $('Webhook - Novo Lead (Quiz)').item.json.body.email }}"
+      },
+      "id": "sheets-check-1",
+      "name": "Verificar se já comprou (1)",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [880, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict" },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.comprou }}",
+              "rightValue": "sim",
+              "operator": { "type": "string", "operation": "notEquals" }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "if-not-purchased-1",
+      "name": "Ainda não comprou?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1100, 0]
+    },
+    {
+      "parameters": {
+        "fromEmail": "contato@seudominio.com",
+        "toEmail": "={{ $('Webhook - Novo Lead (Quiz)').item.json.body.email }}",
+        "subject": "Isso não é falta de força de vontade, {{ $('Webhook - Novo Lead (Quiz)').item.json.body.nome }}",
+        "emailFormat": "html",
+        "html": "<p>{{ $('Webhook - Novo Lead (Quiz)').item.json.body.nome }},</p><p>Preciso te dizer uma coisa: <strong>isso não é falta de força de vontade.</strong></p><p>A ansiedade dos preparativos faz o corpo pedir mais comida, não menos. Você não tá fazendo nada errado — só ninguém te deu um plano desenhado pra essa fase específica.</p><p>É por isso que o Desafio Shape de Noiva não começa com dieta restritiva. Começa tratando o que realmente está acontecendo.</p><p><a href=\"COLE_AQUI_O_LINK_DE_CHECKOUT\">Ver o Desafio completo — R$47,90</a></p>",
+        "options": {}
+      },
+      "id": "email-2",
+      "name": "Enviar E-mail 2 (reforço da dor)",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [1320, -80]
+    },
+    {
+      "parameters": {
+        "amount": 24,
+        "unit": "hours"
+      },
+      "id": "wait-24h-2",
+      "name": "Esperar mais 24h",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1540, -80]
+    },
+    {
+      "parameters": {
+        "operation": "lookup",
+        "documentId": "COLE_AQUI_O_ID_DA_SUA_PLANILHA",
+        "sheetName": "Leads",
+        "lookupColumn": "email",
+        "lookupValue": "={{ $('Webhook - Novo Lead (Quiz)').item.json.body.email }}"
+      },
+      "id": "sheets-check-2",
+      "name": "Verificar se já comprou (2)",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [1760, -80]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict" },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.comprou }}",
+              "rightValue": "sim",
+              "operator": { "type": "string", "operation": "notEquals" }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "if-not-purchased-2",
+      "name": "Ainda não comprou? (2)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1980, -80]
+    },
+    {
+      "parameters": {
+        "fromEmail": "contato@seudominio.com",
+        "toEmail": "={{ $('Webhook - Novo Lead (Quiz)').item.json.body.email }}",
+        "subject": "{{ $('Webhook - Novo Lead (Quiz)').item.json.body.nome }}, o tempo que passou não volta",
+        "emailFormat": "html",
+        "html": "<p>{{ $('Webhook - Novo Lead (Quiz)').item.json.body.nome }},</p><p>O Desafio Shape de Noiva continua esperando você começar. Cada semana que passa é uma semana a menos pra ver resultado antes do grande dia.</p><p>O Desafio custa R$47,90 — menos que um retoque de unha, pelas próximas 3 semanas mais importantes da sua rotina até o casamento.</p><p><a href=\"COLE_AQUI_O_LINK_DE_CHECKOUT\">Começar agora — R$47,90</a></p>",
+        "options": {}
+      },
+      "id": "email-3",
+      "name": "Enviar E-mail 3 (urgência real)",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [2200, -80]
+    }
+  ],
+  "connections": {
+    "Webhook - Novo Lead (Quiz)": { "main": [[{ "node": "Google Sheets - Salvar Lead", "type": "main", "index": 0 }]] },
+    "Google Sheets - Salvar Lead": { "main": [[{ "node": "Enviar E-mail 1 (imediato)", "type": "main", "index": 0 }]] },
+    "Enviar E-mail 1 (imediato)": { "main": [[{ "node": "Esperar 24h", "type": "main", "index": 0 }]] },
+    "Esperar 24h": { "main": [[{ "node": "Verificar se já comprou (1)", "type": "main", "index": 0 }]] },
+    "Verificar se já comprou (1)": { "main": [[{ "node": "Ainda não comprou?", "type": "main", "index": 0 }]] },
+    "Ainda não comprou?": { "main": [[{ "node": "Enviar E-mail 2 (reforço da dor)", "type": "main", "index": 0 }], []] },
+    "Enviar E-mail 2 (reforço da dor)": { "main": [[{ "node": "Esperar mais 24h", "type": "main", "index": 0 }]] },
+    "Esperar mais 24h": { "main": [[{ "node": "Verificar se já comprou (2)", "type": "main", "index": 0 }]] },
+    "Verificar se já comprou (2)": { "main": [[{ "node": "Ainda não comprou? (2)", "type": "main", "index": 0 }]] },
+    "Ainda não comprou? (2)": { "main": [[{ "node": "Enviar E-mail 3 (urgência real)", "type": "main", "index": 0 }], []] }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" }
+}

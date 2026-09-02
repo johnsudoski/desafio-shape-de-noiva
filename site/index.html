@@ -213,6 +213,10 @@
    JS mínimo, HTML semântico, mobile-first).
    ========================================================= */
 
+// TODO: troque pela URL do webhook do n8n (node "Webhook - Novo Lead" em
+// automations/n8n-lead-nurture.json, depois de importar e ativar o workflow).
+const LEAD_WEBHOOK_URL = 'COLE_AQUI_A_URL_DO_WEBHOOK_N8N';
+
 const questions = [
   {
     id: 'q1',
@@ -392,18 +396,16 @@ function submitCapture() {
   answers.email = email;
   answers.whats = whats;
 
-  /* ==========================================================
-     TODO (integração real): aqui é onde você envia `answers`
-     pro seu provedor de e-mail marketing / CRM (ex: webhook
-     pra ActiveCampaign, Mailchimp, RD Station, ou direto pro
-     Hotmart/Kiwify se estiver usando captura própria).
-     Exemplo:
-     fetch('https://SEU-ENDPOINT/leads', {
-       method: 'POST',
-       headers: {'Content-Type':'application/json'},
-       body: JSON.stringify(answers)
-     });
-     ========================================================== */
+  // Envia o lead pro n8n (workflow: automations/n8n-lead-nurture.json).
+  // Troque LEAD_WEBHOOK_URL (definida no topo do script) pela URL real
+  // do node "Webhook - Novo Lead" depois de importar e ativar o workflow.
+  if (LEAD_WEBHOOK_URL && !LEAD_WEBHOOK_URL.includes('COLE_AQUI')) {
+    fetch(LEAD_WEBHOOK_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(answers),
+    }).catch(() => { /* falha de rede não deve travar a experiência da usuária */ });
+  }
 
   document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
   document.getElementById('step-loading').classList.add('active');
