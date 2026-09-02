@@ -1,0 +1,96 @@
+{
+  "name": "Rosa — Drip Diário (envia o plano do dia)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{ "field": "cronExpression", "expression": "0 7 * * *" }]
+        }
+      },
+      "id": "cron-diario",
+      "name": "Todo dia às 7h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": "COLE_AQUI_O_ID_DA_PLANILHA_DE_LEADS",
+        "sheetName": "Leads",
+        "filtersUI": {
+          "values": [{ "lookupColumn": "mentoria_ativa", "lookupValue": "sim" }]
+        }
+      },
+      "id": "sheets-leads-ativos",
+      "name": "Buscar Noivas Ativas na Mentoria",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Roda pra cada noiva ativa: calcula o dia dela e filtra quem já terminou os 21 dias\nconst items = $input.all();\nconst hoje = new Date();\nconst resultado = [];\n\nfor (const item of items) {\n  const lead = item.json;\n  const dataCompra = new Date(lead.data_compra || Date.now());\n  const diaAtual = Math.floor((hoje - dataCompra) / 86400000) + 1;\n\n  if (diaAtual >= 1 && diaAtual <= 21) {\n    const semana = Math.ceil(diaAtual / 7);\n    const fases = {\n      1: \"Semana 1 - Choque Anti-Inchaço: hidratação, água morna com limão, treino leve de ativação.\",\n      2: \"Semana 2 - Intensifica: mais proteína e fibra, circuito mais intenso.\",\n      3: \"Semana 3 - Reta Final: cardápio leve anti-inchaço, tonificação e alongamento, preparação emocional.\"\n    };\n    resultado.push({\n      json: {\n        nome: lead.nome,\n        telefone: lead.telefone,\n        restricoes: lead.restricoes_alimentares || 'nenhuma',\n        dia_atual: diaAtual,\n        fase_descricao: fases[semana]\n      }\n    });\n  }\n}\nreturn resultado;"
+      },
+      "id": "code-filtrar-dia",
+      "name": "Calcular Dia de Cada Noiva",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "anthropic-version", "value": "2023-06-01" },
+            { "name": "content-type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  model: \"claude-sonnet-5\",\n  max_tokens: 500,\n  system: `Você é Rosa, mentora digital do Desafio Shape de Noiva. Gere a mensagem diária de WhatsApp do Dia ${$json.dia_atual} de 21 pra ${$json.nome}.\\n\\nRegras: siga a filosofia da fase (${$json.fase_descricao}). Respeite restrições: ${$json.restricoes}. Nunca prometa resultado numérico. Inclua: 1 frase motivacional curta, sugestão de café/almoço/lanche/jantar (proteína + vegetal + carboidrato leve, pode variar livremente), o treino do dia OU descanso ativo, e 1 dica prática. Tom caloroso, formato WhatsApp real (curto, com quebras de linha, emoji 🌹💧✨ com moderação). Assine como Rosa.`,\n  messages: [{ role: \"user\", content: \"Gere a mensagem de hoje.\" }]\n}) }}"
+      },
+      "id": "http-claude-gera-dia",
+      "name": "Rosa Gera a Mensagem do Dia",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const resposta = $input.first().json;\nconst texto = resposta.content && resposta.content[0] ? resposta.content[0].text : null;\nreturn [{ json: { telefone: $('Calcular Dia de Cada Noiva').first().json.telefone, resposta_texto: texto } }];"
+      },
+      "id": "code-extrair-drip",
+      "name": "Extrair Mensagem",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [880, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.z-api.io/instances/COLE_SEU_INSTANCE_ID/token/COLE_SEU_TOKEN/send-text",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ phone: $json.telefone, message: $json.resposta_texto }) }}"
+      },
+      "id": "http-zapi-drip",
+      "name": "Enviar Plano do Dia (Z-API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1100, 0]
+    }
+  ],
+  "connections": {
+    "Todo dia às 7h": { "main": [[{ "node": "Buscar Noivas Ativas na Mentoria", "type": "main", "index": 0 }]] },
+    "Buscar Noivas Ativas na Mentoria": { "main": [[{ "node": "Calcular Dia de Cada Noiva", "type": "main", "index": 0 }]] },
+    "Calcular Dia de Cada Noiva": { "main": [[{ "node": "Rosa Gera a Mensagem do Dia", "type": "main", "index": 0 }]] },
+    "Rosa Gera a Mensagem do Dia": { "main": [[{ "node": "Extrair Mensagem", "type": "main", "index": 0 }]] },
+    "Extrair Mensagem": { "main": [[{ "node": "Enviar Plano do Dia (Z-API)", "type": "main", "index": 0 }]] }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" }
+}

@@ -1,0 +1,61 @@
+{
+  "name": "Rosa — Reengajamento (noiva sumida)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [{ "field": "cronExpression", "expression": "0 18 * * *" }] }
+      },
+      "id": "cron-reengajamento",
+      "name": "Todo dia às 18h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": "COLE_AQUI_O_ID_DA_PLANILHA_DE_LEADS",
+        "sheetName": "Leads",
+        "filtersUI": {
+          "values": [{ "lookupColumn": "mentoria_ativa", "lookupValue": "sim" }]
+        }
+      },
+      "id": "sheets-leads-ativos-2",
+      "name": "Buscar Noivas Ativas na Mentoria",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Filtra quem não interage (nao responde no whatsapp) ha 2+ dias\n// Pressupoe uma coluna 'ultima_interacao' atualizada pelo Workflow A\n// toda vez que a noiva manda mensagem pra Rosa.\nconst items = $input.all();\nconst hoje = new Date();\nconst resultado = [];\n\nfor (const item of items) {\n  const lead = item.json;\n  if (!lead.ultima_interacao) continue;\n  const ultima = new Date(lead.ultima_interacao);\n  const diasSemInteragir = Math.floor((hoje - ultima) / 86400000);\n  if (diasSemInteragir >= 2) {\n    resultado.push({ json: { nome: lead.nome, telefone: lead.telefone } });\n  }\n}\nreturn resultado;"
+      },
+      "id": "code-filtrar-inativas",
+      "name": "Filtrar Quem Sumiu (2+ dias)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.z-api.io/instances/COLE_SEU_INSTANCE_ID/token/COLE_SEU_TOKEN/send-text",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ phone: $json.telefone, message: `Oi ${$json.nome}, notei que faz um tempinho que a gente não conversa 💛\\nTudo bem? Não precisa ter feito tudo certinho — só volta quando puder, eu tô aqui te esperando, sem julgamento nenhum. 🌹` }) }}"
+      },
+      "id": "http-zapi-reengaja",
+      "name": "Enviar Mensagem de Reengajamento (Z-API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 0]
+    }
+  ],
+  "connections": {
+    "Todo dia às 18h": { "main": [[{ "node": "Buscar Noivas Ativas na Mentoria", "type": "main", "index": 0 }]] },
+    "Buscar Noivas Ativas na Mentoria": { "main": [[{ "node": "Filtrar Quem Sumiu (2+ dias)", "type": "main", "index": 0 }]] },
+    "Filtrar Quem Sumiu (2+ dias)": { "main": [[{ "node": "Enviar Mensagem de Reengajamento (Z-API)", "type": "main", "index": 0 }]] }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" }
+}

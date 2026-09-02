@@ -1,0 +1,134 @@
+{
+  "name": "Rosa — Conversa Reativa (WhatsApp)",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "rosa/mensagem",
+        "httpMethod": "POST",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "webhook-rosa-msg",
+      "name": "Webhook - Mensagem Recebida (Z-API)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict" },
+          "conditions": [
+            { "leftValue": "={{ $json.body.fromMe }}", "rightValue": true, "operator": { "type": "boolean", "operation": "notEquals" } }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "if-not-from-me",
+      "name": "Ignorar Mensagem Própria",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "operation": "lookup",
+        "documentId": "COLE_AQUI_O_ID_DA_PLANILHA_DE_LEADS",
+        "sheetName": "Leads",
+        "lookupColumn": "telefone",
+        "lookupValue": "={{ $json.body.phone }}"
+      },
+      "id": "sheets-lookup-lead",
+      "name": "Buscar Dados da Noiva",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Calcula em que dia/semana do Desafio a noiva está, e monta o contexto pra Rosa\nconst lead = $input.first().json;\nconst dataCompra = new Date(lead.data_compra || Date.now());\nconst hoje = new Date();\nconst diaAtual = Math.max(1, Math.min(21, Math.floor((hoje - dataCompra) / 86400000) + 1));\nconst semana = Math.ceil(diaAtual / 7);\n\nconst fases = {\n  1: \"Semana 1 - Choque Anti-Inchaço: foco em hidratação, água morna com limão, treinos leves de ativação e mobilidade.\",\n  2: \"Semana 2 - Intensifica: mais proteína e fibra, treinos em circuito mais intensos.\",\n  3: \"Semana 3 - Reta Final / Prova do Vestido: cardápio leve anti-inchaço, treino de tonificação e alongamento, foco em preparação emocional pro grande dia.\"\n};\n\nreturn [{\n  json: {\n    nome: lead.nome || 'noiva',\n    telefone: lead.telefone,\n    restricoes: lead.restricoes_alimentares || 'nenhuma restrição informada',\n    dia_atual: diaAtual,\n    semana: semana,\n    fase_descricao: fases[semana],\n    pergunta: $('Webhook - Mensagem Recebida (Z-API)').first().json.body.text?.message || ''\n  }\n}];"
+      },
+      "id": "code-calcular-contexto",
+      "name": "Calcular Dia/Semana + Contexto",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "anthropic-version", "value": "2023-06-01" },
+            { "name": "content-type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  model: \"claude-sonnet-5\",\n  max_tokens: 600,\n  system: `Você é Rosa, mentora digital do \"Desafio Shape de Noiva\" — desafio de 21 dias de alimentação leve, treino e mentalidade para noivas com casamento marcado.\\n\\nREGRAS INQUEBRÁVEIS:\\n1. Você é uma mentora DIGITAL (inteligência artificial) — nunca finja ser humana. Se perguntarem diretamente, admita com carinho, sem soar fria.\\n2. Pode gerar receitas novas e sugestões de cronograma na hora, SEMPRE seguindo o padrão nutricional do Desafio: proteína magra + vegetal + carboidrato leve, nada de dieta restritiva extrema.\\n3. NUNCA prometa resultado numérico (kg, medidas). Use linguagem como \"pode ajudar a reduzir inchaço\" — nunca garantias.\\n4. Respeite SEMPRE as restrições alimentares informadas: ${$json.restricoes}. Nunca sugira ingrediente que ela não pode comer.\\n5. Se a pergunta envolver sintoma médico, emergência, ou saúde fora do escopo do Desafio (dor, sangramento, mal-estar sério): PARE, oriente a procurar ajuda médica real imediatamente, não tente resolver.\\n6. Tom: caloroso, direto, mensagens curtas (estilo WhatsApp real, no máximo 4-5 linhas). Use o nome dela. Emoji com moderação (🌹💧✨).\\n7. Se não souber responder com segurança, diga isso honestamente em vez de inventar.\\n\\nCONTEXTO DELA:\\nNome: ${$json.nome}\\nDia atual do desafio: ${$json.dia_atual} de 21\\nFase da semana: ${$json.fase_descricao}\\nRestrições alimentares: ${$json.restricoes}`,\n  messages: [{ role: \"user\", content: $json.pergunta }]\n}) }}"
+      },
+      "id": "http-claude-api",
+      "name": "Chamar Rosa (Claude API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const resposta = $input.first().json;\nconst texto = resposta.content && resposta.content[0] ? resposta.content[0].text : 'Desculpa, tive um probleminha aqui — pode repetir? 🌹';\nreturn [{ json: { telefone: $('Calcular Dia/Semana + Contexto').first().json.telefone, resposta_texto: texto } }];"
+      },
+      "id": "code-extrair-resposta",
+      "name": "Extrair Texto da Resposta",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1100, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.z-api.io/instances/COLE_SEU_INSTANCE_ID/token/COLE_SEU_TOKEN/send-text",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ phone: $json.telefone, message: $json.resposta_texto }) }}"
+      },
+      "id": "http-zapi-send",
+      "name": "Enviar Resposta (Z-API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1320, 0]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": "COLE_AQUI_O_ID_DA_PLANILHA_DE_LEADS",
+        "sheetName": "Leads",
+        "columnToMatchOn": "telefone",
+        "valueToMatchOn": "={{ $json.telefone }}",
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": { "ultima_interacao": "={{ $now.toISO() }}" }
+        }
+      },
+      "id": "sheets-update-interacao",
+      "name": "Registrar Última Interação",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [1540, 0]
+    }
+  ],
+  "connections": {
+    "Webhook - Mensagem Recebida (Z-API)": { "main": [[{ "node": "Ignorar Mensagem Própria", "type": "main", "index": 0 }]] },
+    "Ignorar Mensagem Própria": { "main": [[{ "node": "Buscar Dados da Noiva", "type": "main", "index": 0 }], []] },
+    "Buscar Dados da Noiva": { "main": [[{ "node": "Calcular Dia/Semana + Contexto", "type": "main", "index": 0 }]] },
+    "Calcular Dia/Semana + Contexto": { "main": [[{ "node": "Chamar Rosa (Claude API)", "type": "main", "index": 0 }]] },
+    "Chamar Rosa (Claude API)": { "main": [[{ "node": "Extrair Texto da Resposta", "type": "main", "index": 0 }]] },
+    "Extrair Texto da Resposta": { "main": [[{ "node": "Enviar Resposta (Z-API)", "type": "main", "index": 0 }]] },
+    "Enviar Resposta (Z-API)": { "main": [[{ "node": "Registrar Última Interação", "type": "main", "index": 0 }]] }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" }
+}
