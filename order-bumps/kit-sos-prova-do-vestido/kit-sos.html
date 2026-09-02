@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kit SOS — Prova do Vestido</title>
+<meta name="description" content="Guia de emergência para as últimas 48 horas antes do casamento: anti-inchaço, o que comer, ritual de calma e checklist do dia.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ivoire:#fbf5ec; --ivoire-deep:#f0e4d3; --card:#ffffff; --line:#e6d8c3;
+    --bordeaux:#7a2e3b; --bordeaux-deep:#5e2029; --sage:#7c8b6f; --sage-deep:#5f6d54; --sage-pale:#eef1ea;
+    --ink:#2e2320; --ink-soft:#6b5850; --radius:14px; --shadow:0 8px 30px rgba(46,35,32,0.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Manrope',system-ui,sans-serif;background:var(--ivoire-deep);color:var(--ink);font-synthesis:none;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3,h4,.serif{font-family:'Playfair Display',Georgia,serif;text-wrap:balance;}
+  .page{max-width:780px;margin:0 auto;background:var(--ivoire);}
+  .sheet{padding:52px 46px;border-bottom:1px solid var(--line);}
+  p{max-width:64ch;}
+  img{max-width:100%;display:block;}
+
+  .cover{position:relative;height:100vh;min-height:640px;display:flex;align-items:flex-end;overflow:hidden;}
+  .cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 20%;}
+  .cover::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(46,35,32,0.05) 0%,rgba(46,35,32,0.78) 85%);}
+  .cover-content{position:relative;z-index:2;padding:52px 46px;color:#fff;}
+  .cover-eyebrow{font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--ivoire-deep);margin-bottom:14px;}
+  .cover h1{font-size:42px;line-height:1.12;font-weight:600;font-style:italic;margin-bottom:14px;}
+  .cover-sub{font-size:16px;line-height:1.55;color:#f0e4d3;max-width:46ch;}
+
+  .eyebrow{color:var(--bordeaux);font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;}
+  h2.section-title{font-size:29px;font-style:italic;font-weight:600;line-height:1.2;margin-bottom:14px;}
+  .lede{font-size:15.5px;line-height:1.65;color:var(--ink-soft);margin-bottom:10px;max-width:60ch;}
+  .lede strong{color:var(--ink);}
+
+  .box{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--sage);border-radius:10px;
+    padding:16px 18px;margin:16px 0;font-size:14px;line-height:1.6;}
+  .box.bordeaux{border-left-color:var(--bordeaux);}
+  .box b{color:var(--bordeaux);}
+
+  .timeline{margin:24px 0;}
+  .time-block{display:flex;gap:18px;margin-bottom:22px;}
+  .time-tag{flex-shrink:0;width:120px;text-align:right;}
+  .time-tag .when{font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:19px;color:var(--bordeaux);}
+  .time-body{flex:1;border-left:3px solid var(--sage);padding-left:20px;padding-bottom:4px;}
+  .time-body h4{font-size:16px;margin-bottom:8px;}
+  .time-body ul{padding-left:18px;font-size:14px;color:var(--ink-soft);line-height:1.65;}
+  .time-body li{margin-bottom:4px;}
+  .time-body li b{color:var(--ink);}
+
+  .recipe-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0 26px;}
+  .recipe-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;}
+  .recipe-card h4{font-size:14.5px;font-weight:700;font-family:'Manrope';font-style:normal;margin-bottom:8px;color:var(--bordeaux-deep);}
+  .recipe-card ul{padding-left:16px;font-size:12.5px;line-height:1.55;color:var(--ink-soft);margin-bottom:8px;}
+  .recipe-card .prep{font-size:12.5px;line-height:1.5;color:var(--ink);}
+  .recipe-card .prep b{color:var(--bordeaux);font-weight:700;}
+  .meal-label{display:inline-block;background:var(--sage-pale);color:var(--sage-deep);font-size:10.5px;font-weight:700;
+    letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:99px;margin-bottom:12px;}
+
+  .avoid-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0;}
+  .avoid-item{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:13.5px;
+    display:flex;gap:10px;align-items:flex-start;}
+  .avoid-item::before{content:"✕";color:var(--bordeaux);font-weight:800;flex-shrink:0;}
+
+  .checklist{list-style:none;margin:16px 0;}
+  .checklist li{display:flex;align-items:flex-start;gap:10px;padding:8px 0;font-size:13.5px;border-bottom:1px solid var(--line);}
+  .checklist .box-icon{width:16px;height:16px;border:2px solid var(--bordeaux);border-radius:4px;flex-shrink:0;margin-top:2px;}
+
+  .step-list{margin:16px 0;}
+  .step-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--line);}
+  .step-num{font-family:'Playfair Display',serif;font-style:italic;font-weight:600;font-size:20px;color:var(--bordeaux);flex-shrink:0;width:28px;}
+  .step-item h4{font-size:14.5px;margin-bottom:4px;}
+  .step-item p{font-size:13px;color:var(--ink-soft);line-height:1.55;}
+
+  .closing{background:var(--sage-pale);}
+  .disclaimer{font-size:11.5px;line-height:1.6;color:var(--ink-soft);margin-top:20px;padding-top:20px;border-top:1px solid var(--line);}
+
+  @media print{ body{background:#fff;} .page{max-width:none;} .sheet{page-break-after:always;padding:30px;} .cover{height:100vh;} }
+  @media (max-width:600px){ .sheet{padding:34px 20px;} .recipe-grid,.avoid-grid{grid-template-columns:1fr;} .cover h1{font-size:30px;} .time-block{flex-direction:column;gap:8px;} .time-tag{width:auto;text-align:left;} }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <section class="cover">
+    <img src="images/hero-noiva-espelho.jpg" alt="Noiva se olhando no espelho">
+    <div class="cover-content">
+      <div class="cover-eyebrow">Bônus · Desafio Shape de Noiva</div>
+      <h1 class="serif">Kit SOS<br>Prova do Vestido</h1>
+      <p class="cover-sub">O guia de emergência pras últimas 48 horas antes do casamento — pra você chegar leve, calma e se sentindo exatamente como sempre imaginou.</p>
+    </div>
+  </section>
+
+  <section class="sheet">
+    <div class="eyebrow">Antes de começar</div>
+    <h2 class="section-title">As Últimas 48h São Diferentes</h2>
+    <p class="lede">Esqueça tudo que você aprendeu sobre "resultado a longo prazo". Agora faltam horas, não semanas — e o jogo muda. Aqui o objetivo não é mais definição muscular ou hábito construído: é <strong>reduzir inchaço na velocidade máxima que o corpo permite</strong>, com segurança, e chegar no altar sentindo o vestido do jeito que você experimentou no ensaio.</p>
+    <p class="lede" style="margin-top:12px;">Esse guia é hora a hora. Siga na ordem — cada decisão nas últimas 48h afeta a seguinte.</p>
+
+    <div class="box bordeaux">
+      <b>Regra de ouro dessas 48h:</b> nada de novidade. Não teste receita nova, não experimente exercício novo, não mude produto de pele. O corpo reage melhor ao que ele já conhece — novidade é imprevisível, e agora não é hora de imprevisto.
+    </div>
+  </section>
+
+  <section class="sheet">
+    <div class="eyebrow">O guia hora a hora</div>
+    <h2 class="section-title">Linha do Tempo Completa</h2>
+
+    <div class="timeline">
+      <div class="time-block">
+        <div class="time-tag"><span class="when">48h</span><br><small>antes</small></div>
+        <div class="time-body">
+          <h4>Dois dias antes do grande dia</h4>
+          <ul>
+            <li><b>Manhã:</b> água morna com limão ao acordar (ritual de sempre). Café da manhã leve — evite laticínio em excesso.</li>
+            <li><b>Ao longo do dia:</b> beba pelo menos 2,5L de água. Parece contraintuitivo, mas beber mais água é o que mais ajuda a eliminar retenção — o corpo retém quando sente que vai faltar.</li>
+            <li><b>Alimentação:</b> proteína magra + vegetais + carboidrato leve, como você já vem fazendo no Desafio. Nada de sal extra, nada de industrializado.</li>
+            <li><b>Treino:</b> só alongamento leve. Nada de treino intenso — o corpo precisa de recuperação, não de mais estímulo.</li>
+            <li><b>Sono:</b> durma no horário normal. Não adiante o sono de amanhã achando que "descansa mais" — rotina irregular também causa inchaço.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="time-block">
+        <div class="time-tag"><span class="when">24h</span><br><small>véspera</small></div>
+        <div class="time-body">
+          <h4>A véspera do casamento</h4>
+          <ul>
+            <li><b>Manhã:</b> água morna com limão. Café da manhã com proteína (ovo, iogurte) — evita inchaço e mantém energia estável o dia todo.</li>
+            <li><b>Almoço:</b> prato leve — proteína grelhada + salada crua + pouquíssimo carboidrato. Sem massa, sem pão, sem frituras.</li>
+            <li><b>Tarde:</b> se possível, um cochilo curto (20-30min) — reduz cortisol e ajuda a desinchar o rosto pra próxima manhã.</li>
+            <li><b>Jantar:</b> o mais leve do guia inteiro — sopa ou salada com proteína magra, comido cedo (até 3h antes de deitar).</li>
+            <li><b>Noite:</b> ritual de respiração 4-7-8 (do Kit Anti-Ansiedade) antes de dormir. Sem celular na última meia hora.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="time-block">
+        <div class="time-tag"><span class="when">O</span><br><small>grande dia</small></div>
+        <div class="time-body">
+          <h4>Manhã do casamento</h4>
+          <ul>
+            <li><b>Ao acordar:</b> água morna com limão + 5 minutos de respiração antes de sair da cama.</li>
+            <li><b>Café da manhã:</b> leve mas não pule — estômago vazio deixa mais ansiosa e mais inchada por compensação depois. Veja receitas na próxima seção.</li>
+            <li><b>Antes de vestir o vestido:</b> 10 minutos deitada com as pernas elevadas na parede — reduz inchaço de pernas e retenção geral em minutos.</li>
+            <li><b>Hidratação:</b> pequenos goles de água ao longo da manhã, não um copo grande de uma vez (isso incha na hora).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sheet">
+    <div class="eyebrow">Receitas de emergência</div>
+    <h2 class="section-title">O Que Comer Nessas 48h</h2>
+    <p class="lede">Receitas leves, testadas pra não inchar, fáceis de fazer mesmo com a cabeça em outras mil coisas.</p>
+
+    <div class="recipe-grid">
+      <div class="recipe-card">
+        <span class="meal-label">Água anti-inchaço</span>
+        <h4>Água de pepino e hortelã</h4>
+        <ul><li>1L de água</li><li>½ pepino em rodelas</li><li>folhas de hortelã</li><li>gelo</li></ul>
+        <p class="prep"><b>Preparo:</b> misture tudo numa jarra, deixe descansar 30 min na geladeira antes de beber. Substitui refrigerante e suco industrializado nesses dias.</p>
+      </div>
+      <div class="recipe-card">
+        <span class="meal-label">Café da manhã do grande dia</span>
+        <h4>Omelete leve + chá</h4>
+        <ul><li>2 claras + 1 ovo inteiro</li><li>punhado de espinafre</li><li>chá verde ou de hibisco</li></ul>
+        <p class="prep"><b>Preparo:</b> bata e frite sem óleo em excesso. O chá de hibisco tem efeito levemente diurético natural — ajuda a desinchar.</p>
+      </div>
+      <div class="recipe-card">
+        <span class="meal-label">Almoço da véspera</span>
+        <h4>Peixe grelhado com salada crua</h4>
+        <ul><li>150g peixe branco grelhado</li><li>folhas verdes variadas</li><li>azeite e limão (sem sal extra)</li></ul>
+        <p class="prep"><b>Preparo:</b> grelhe o peixe só com limão e ervas, monte a salada e tempere na hora de comer.</p>
+      </div>
+      <div class="recipe-card">
+        <span class="meal-label">Jantar da véspera</span>
+        <h4>Sopa leve de abobrinha</h4>
+        <ul><li>abobrinha</li><li>caldo de legumes caseiro (sem tempero pronto)</li><li>um fio de azeite</li></ul>
+        <p class="prep"><b>Preparo:</b> cozinhe a abobrinha no caldo até ficar macia, bata levemente se preferir textura de creme.</p>
+      </div>
+    </div>
+
+    <h3 style="font-size:17px;margin:6px 0 12px;font-style:italic;font-family:'Playfair Display',serif;">O que evitar sem exceção nessas 48h</h3>
+    <div class="avoid-grid">
+      <div class="avoid-item">Sal em excesso (embutidos, enlatados, temperos prontos) — é o maior causador de retenção de líquido</div>
+      <div class="avoid-item">Álcool — desidrata e incha ao mesmo tempo, pior combinação possível pra essas 48h</div>
+      <div class="avoid-item">Alimentos novos ou muito diferentes do que você já come — risco de reação inesperada</div>
+      <div class="avoid-item">Refrigerante e bebida gaseificada — causa inchaço abdominal imediato</div>
+      <div class="avoid-item">Excesso de carboidrato refinado (pão branco, massa, doce) — retém água junto</div>
+      <div class="avoid-item">Deitar logo após comer — prejudica digestão e piora sensação de inchaço</div>
+    </div>
+  </section>
+
+  <section class="sheet">
+    <div class="eyebrow">Kit físico</div>
+    <h2 class="section-title">O Que Levar na Bolsa do Dia</h2>
+    <p class="lede">Uma sacolinha pequena, separada com antecedência, com o essencial pra qualquer imprevisto de última hora.</p>
+    <ul class="checklist">
+      <li><span class="box-icon"></span>Água (garrafinha pequena, pra beber aos poucos)</li>
+      <li><span class="box-icon"></span>Sachê de chá de hibisco ou camomila</li>
+      <li><span class="box-icon"></span>Lenços umedecidos e um leque pequeno</li>
+      <li><span class="box-icon"></span>Um lanche leve (castanhas) — pra não ficar de estômago vazio esperando a festa</li>
+      <li><span class="box-icon"></span>O celular com a técnica de respiração 4-7-8 salva ou anotada</li>
+    </ul>
+  </section>
+
+  <section class="sheet closing">
+    <div class="eyebrow">Ritual final</div>
+    <h2 class="section-title">Nos Últimos 30 Minutos</h2>
+    <p class="lede">Quando estiver pronta, vestida, esperando o momento de sair:</p>
+
+    <div class="step-list">
+      <div class="step-item"><div class="step-num">1</div><div><h4>Pare. Respire.</h4><p>3 ciclos de respiração 4-7-8. Não tem pressa que valha uma respiração ofegante nas fotos.</p></div></div>
+      <div class="step-item"><div class="step-num">2</div><div><h4>Olhe no espelho uma última vez</h4><p>Não pra procurar defeito — pra reconhecer o trabalho das últimas semanas. Você chegou até aqui.</p></div></div>
+      <div class="step-item"><div class="step-num">3</div><div><h4>Solte a expectativa de perfeição</h4><p>Nenhuma noiva se sente 100% em todos os segundos do dia. Está tudo bem sentir borboletas no estômago.</p></div></div>
+    </div>
+
+    <div class="disclaimer">
+      <b>Aviso importante:</b> este guia tem caráter educacional e não substitui acompanhamento médico ou nutricional. As orientações de hidratação e alimentação são gerais — se tiver qualquer condição de saúde específica, consulte um profissional antes do grande dia.
+      <br><br>
+      © Kit SOS Prova do Vestido — bônus do Desafio Shape de Noiva. Uso pessoal, não redistribuir.
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Protocolo Anti-Ressaca da Despedida</title>
+<meta name="description" content="Recupere em 24h depois da despedida de solteira — hidratação, receitas e retomada do desafio sem culpa.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ivoire:#fbf5ec; --ivoire-deep:#f0e4d3; --card:#ffffff; --line:#e6d8c3;
+    --bordeaux:#7a2e3b; --bordeaux-deep:#5e2029; --sage:#7c8b6f; --sage-deep:#5f6d54; --sage-pale:#eef1ea;
+    --ink:#2e2320; --ink-soft:#6b5850; --radius:14px; --shadow:0 8px 30px rgba(46,35,32,0.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Manrope',system-ui,sans-serif;background:var(--ivoire-deep);color:var(--ink);font-synthesis:none;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3,h4,.serif{font-family:'Playfair Display',Georgia,serif;text-wrap:balance;}
+  .page{max-width:780px;margin:0 auto;background:var(--ivoire);}
+  .sheet{padding:52px 46px;border-bottom:1px solid var(--line);}
+  p{max-width:64ch;}
+  img{max-width:100%;display:block;}
+
+  .cover{position:relative;height:100vh;min-height:640px;display:flex;align-items:flex-end;overflow:hidden;}
+  .cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 25%;}
+  .cover::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(46,35,32,0.05) 0%,rgba(46,35,32,0.78) 85%);}
+  .cover-content{position:relative;z-index:2;padding:52px 46px;color:#fff;}
+  .cover-eyebrow{font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--ivoire-deep);margin-bottom:14px;}
+  .cover h1{font-size:40px;line-height:1.14;font-weight:600;font-style:italic;margin-bottom:14px;}
+  .cover-sub{font-size:16px;line-height:1.55;color:#f0e4d3;max-width:46ch;}
+
+  .eyebrow{color:var(--bordeaux);font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;}
+  h2.section-title{font-size:29px;font-style:italic;font-weight:600;line-height:1.2;margin-bottom:14px;}
+  .lede{font-size:15.5px;line-height:1.65;color:var(--ink-soft);margin-bottom:10px;max-width:60ch;}
+  .lede strong{color:var(--ink);}
+
+  .box{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--sage);border-radius:10px;
+    padding:16px 18px;margin:16px 0;font-size:14px;line-height:1.6;}
+  .box.bordeaux{border-left-color:var(--bordeaux);}
+  .box b{color:var(--bordeaux);}
+
+  .timeline{margin:24px 0;}
+  .time-block{display:flex;gap:18px;margin-bottom:20px;}
+  .time-tag{flex-shrink:0;width:110px;text-align:right;}
+  .time-tag .when{font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:17px;color:var(--bordeaux);}
+  .time-body{flex:1;border-left:3px solid var(--sage);padding-left:20px;padding-bottom:2px;}
+  .time-body h4{font-size:15px;margin-bottom:6px;}
+  .time-body p{font-size:13.5px;color:var(--ink-soft);line-height:1.6;}
+
+  .recipe-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0 26px;}
+  .recipe-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;}
+  .recipe-card h4{font-size:14.5px;font-weight:700;font-family:'Manrope';font-style:normal;margin-bottom:8px;color:var(--bordeaux-deep);}
+  .recipe-card ul{padding-left:16px;font-size:12.5px;line-height:1.55;color:var(--ink-soft);margin-bottom:8px;}
+  .recipe-card .prep{font-size:12.5px;line-height:1.5;color:var(--ink);}
+  .recipe-card .prep b{color:var(--bordeaux);font-weight:700;}
+  .meal-label{display:inline-block;background:var(--sage-pale);color:var(--sage-deep);font-size:10.5px;font-weight:700;
+    letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:99px;margin-bottom:12px;}
+
+  .avoid-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0;}
+  .avoid-item{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:13.5px;
+    display:flex;gap:10px;align-items:flex-start;}
+  .avoid-item::before{content:"✕";color:var(--bordeaux);font-weight:800;flex-shrink:0;}
+
+  .checklist{list-style:none;margin:16px 0;}
+  .checklist li{display:flex;align-items:flex-start;gap:10px;padding:8px 0;font-size:13.5px;border-bottom:1px solid var(--line);}
+  .checklist .box-icon{width:16px;height:16px;border:2px solid var(--bordeaux);border-radius:4px;flex-shrink:0;margin-top:2px;}
+
+  .step-list{margin:16px 0;}
+  .step-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--line);}
+  .step-num{font-family:'Playfair Display',serif;font-style:italic;font-weight:600;font-size:20px;color:var(--bordeaux);flex-shrink:0;width:28px;}
+  .step-item h4{font-size:14.5px;margin-bottom:4px;}
+  .step-item p{font-size:13px;color:var(--ink-soft);line-height:1.55;}
+
+  .closing{background:var(--sage-pale);}
+  .disclaimer{font-size:11.5px;line-height:1.6;color:var(--ink-soft);margin-top:20px;padding-top:20px;border-top:1px solid var(--line);}
+
+  @media print{ body{background:#fff;} .page{max-width:none;} .sheet{page-break-after:always;padding:30px;} .cover{height:100vh;} }
+  @media (max-width:600px){ .sheet{padding:34px 20px;} .recipe-grid,.avoid-grid{grid-template-columns:1fr;} .cover h1{font-size:28px;} .time-block{flex-direction:column;gap:8px;} .time-tag{width:auto;text-align:left;} }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <section class="cover">
+    <img src="images/noiva-buque-sorrindo.jpg" alt="Noiva feliz">
+    <div class="cover-content">
+      <div class="cover-eyebrow">Bônus · Desafio Shape de Noiva</div>
+      <h1 class="serif">Protocolo<br>Anti-Ressaca da Despedida</h1>
+      <p class="cover-sub">Recupere em 24 horas depois da despedida de solteira — sem culpa, sem perder o ritmo do seu Desafio.</p>
+    </div>
+  </section>
+
+  <section class="sheet">
+    <div class="eyebrow">Sem julgamento</div>
+    <h2 class="section-title">A Despedida Faz Parte</h2>
+    <p class="lede">Quase toda noiva tem uma despedida de solteira em algum momento antes do casamento — e é pra ser assim: comemorar com quem você ama faz parte do processo, não é sabotagem. Esse guia não existe pra te fazer sentir culpa por ter aproveitado a noite. Existe pra te ajudar a <strong>voltar ao eixo em 24h</strong>, sem drama, sem recomeçar do zero.</p>
+
+    <div class="box bordeaux">
+      <b>O que acontece no corpo:</b> uma noite com mais sal (salgadinhos, comida de festa), mais açúcar e álcool causa retenção de líquido temporária e desidratação — não é gordura, é água. Some rápido com o protocolo certo, geralmente em 24-48h.
+    </div>
+  </section>
+
+  <section class="sheet">
+    <div class="eyebrow">O dia depois, hora a hora</div>
+    <h2 class="section-title">Protocolo de Recuperação</h2>
+
+    <div class="timeline">
+      <div class="time-block">
+        <div class="time-tag"><span class="when">Ao acordar</span></div>
+        <div class="time-body">
+          <h4>Hidratação em dobro</h4>
+          <p>Beba 500ml de água antes de qualquer outra coisa — o dobro do ritual normal. Se tiver, adicione uma pitada de sal rosa e limão (repõe eletrólitos perdidos, ajuda mais rápido que água pura sozinha).</p>
+        </div>
+      </div>
+      <div class="time-block">
+        <div class="time-tag"><span class="when">Café da manhã</span></div>
+        <div class="time-body">
+          <h4>Proteína + potássio</h4>
+          <p>Ovos e uma banana são a combinação certa aqui — proteína estabiliza o açúcar no sangue (evita aquela fome descontrolada de ressaca), e o potássio da banana ajuda a repor o que o álcool tirou.</p>
+        </div>
+      </div>
+      <div class="time-block">
+        <div class="time-tag"><span class="when">Meio da manhã</span></div>
+        <div class="time-body">
+          <h4>Movimento leve, nunca treino pesado</h4>
+          <p>Uma caminhada de 15-20 minutos ativa a circulação e ajuda a eliminar a retenção mais rápido. Treino intenso hoje só vai sobrecarregar um corpo que já está trabalhando pra se recuperar.</p>
+        </div>
+      </div>
+      <div class="time-block">
+        <div class="time-tag"><span class="when">Almoço</span></div>
+        <div class="time-body">
+          <h4>Prato de recuperação</h4>
+          <p>Proteína magra + muito vegetal + carboidrato leve. Veja a receita completa na próxima seção — é a refeição mais importante desse dia inteiro.</p>
+        </div>
+      </div>
+      <div class="time-block">
+        <div class="time-tag"><span class="when">Tarde</span></div>
+        <div class="time-body">
+          <h4>Chá + descanso</h4>
+          <p>Chá de gengibre ou hortelã ajuda a digestão. Se bater cansaço, é normal — o corpo gastou energia extra processando a noite anterior. Descanse sem culpa.</p>
+        </div>
+      </div>
+      <div class="time-block">
+        <div class="time-tag"><span class="when">Jantar</span></div>
+        <div class="time-body">
+          <h4>Leve e cedo</h4>
+          <p>Sopa ou salada com proteína, no máximo até 3h antes de dormir. Amanhã você já volta 100% pro ritmo normal do Desafio.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sheet">
+    <div class="eyebrow">Receitas de recuperação</div>
+    <h2 class="section-title">O Que Comer Hoje</h2>
+
+    <div class="recipe-grid">
+      <div class="recipe-card">
+        <span class="meal-label">Hidratação</span>
+        <h4>Água de coco com limão</h4>
+        <ul><li>300ml água de coco</li><li>suco de ½ limão</li><li>gelo</li></ul>
+        <p class="prep"><b>Preparo:</b> misture e beba aos poucos ao longo da manhã. Repõe eletrólitos de forma natural, muito mais eficaz que água pura sozinha nesse momento.</p>
+      </div>
+      <div class="recipe-card">
+        <span class="meal-label">Café da manhã</span>
+        <h4>Ovos mexidos com banana</h4>
+        <ul><li>2 ovos mexidos</li><li>1 banana</li><li>pitada de canela</li></ul>
+        <p class="prep"><b>Preparo:</b> prepare os ovos simples, sem excesso de óleo. Coma a banana separada ou amassada com canela.</p>
+      </div>
+      <div class="recipe-card">
+        <span class="meal-label">Almoço</span>
+        <h4>Frango grelhado com purê de batata-doce</h4>
+        <ul><li>150g frango grelhado</li><li>batata-doce cozida e amassada</li><li>brócolis no vapor</li></ul>
+        <p class="prep"><b>Preparo:</b> grelhe o frango com temperos leves, cozinhe e amasse a batata-doce, sirva com o brócolis.</p>
+      </div>
+      <div class="recipe-card">
+        <span class="meal-label">Jantar</span>
+        <h4>Sopa de legumes leve</h4>
+        <ul><li>cenoura, abobrinha, chuchu</li><li>caldo caseiro sem sal em excesso</li><li>cheiro-verde</li></ul>
+        <p class="prep"><b>Preparo:</b> cozinhe os legumes no caldo até ficarem macios. Reconfortante e fácil de digerir.</p>
+      </div>
+    </div>
+
+    <h3 style="font-size:17px;margin:6px 0 12px;font-style:italic;font-family:'Playfair Display',serif;">O que evitar hoje (só hoje, sem drama)</h3>
+    <div class="avoid-grid">
+      <div class="avoid-item">Fast food "pra curar a ressaca" — piora a retenção, mesmo parecendo gostoso na hora</div>
+      <div class="avoid-item">Mais álcool "pra melhorar" — só adia o problema e desidrata mais</div>
+      <div class="avoid-item">Pular refeição achando que "compensa" a noite anterior — só atrasa a recuperação</div>
+      <div class="avoid-item">Café em excesso — desidrata ainda mais num dia que o corpo já está sedento</div>
+    </div>
+  </section>
+
+  <section class="sheet closing">
+    <div class="eyebrow">Retomando o desafio</div>
+    <h2 class="section-title">Amanhã Você Volta 100%</h2>
+    <p class="lede">Um dia de recuperação não desfaz nada do que você construiu. O Desafio Shape de Noiva foi desenhado pra vida real — e vida real inclui despedida de solteira.</p>
+
+    <div class="step-list">
+      <div class="step-item"><div class="step-num">1</div><div><h4>Sem culpa, sem punição</h4><p>Não compense "treinando o dobro" amanhã. Volte ao ritmo normal do Desafio, sem exagero pra trás.</p></div></div>
+      <div class="step-item"><div class="step-num">2</div><div><h4>Retome o ritual da água morna com limão</h4><p>Amanhã de manhã, direto no protocolo normal da sua semana atual do Desafio.</p></div></div>
+      <div class="step-item"><div class="step-num">3</div><div><h4>Guarde esse guia</h4><p>Se tiver mais eventos sociais até o casamento, é só voltar aqui de novo — o protocolo funciona sempre que precisar.</p></div></div>
+    </div>
+
+    <div class="disclaimer">
+      <b>Aviso importante:</b> este guia tem caráter educacional, não substitui acompanhamento médico ou nutricional. Beba com responsabilidade — este protocolo é sobre recuperação alimentar e de hidratação, não incentiva consumo de álcool. Se sentir mal-estar significativo, procure orientação médica.
+      <br><br>
+      © Protocolo Anti-Ressaca da Despedida — bônus do Desafio Shape de Noiva. Uso pessoal, não redistribuir.
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
