@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Desafio Shape de Noiva — 21 Dias</title>
+<meta name="description" content="Guia completo, dia a dia: cardápio, treino, preparo, mentalidade e manutenção — tudo pra você chegar no altar se sentindo a melhor versão de si mesma.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ivoire:#fbf5ec; --ivoire-deep:#f0e4d3; --card:#ffffff; --line:#e6d8c3;
+    --bordeaux:#7a2e3b; --bordeaux-deep:#5e2029; --sage:#7c8b6f; --sage-deep:#5f6d54; --sage-pale:#eef1ea;
+    --ink:#2e2320; --ink-soft:#6b5850; --radius:14px; --shadow:0 8px 30px rgba(46,35,32,0.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Manrope',system-ui,sans-serif;background:var(--ivoire-deep);color:var(--ink);font-synthesis:none;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3,h4,.serif{font-family:'Playfair Display',Georgia,serif;text-wrap:balance;}
+  .page{max-width:780px;margin:0 auto;background:var(--ivoire);}
+  .sheet{padding:52px 46px;border-bottom:1px solid var(--line);}
+  p{max-width:64ch;}
+  img{max-width:100%;display:block;}
+
+  /* CAPA */
+  .cover{position:relative;height:100vh;min-height:640px;display:flex;align-items:flex-end;overflow:hidden;}
+  .cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 20%;}
+  .cover::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(46,35,32,0.05) 0%,rgba(46,35,32,0.78) 85%);}
+  .cover-content{position:relative;z-index:2;padding:52px 46px;color:#fff;}
+  .cover-eyebrow{font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--ivoire-deep);margin-bottom:14px;}
+  .cover h1{font-size:42px;line-height:1.12;font-weight:600;font-style:italic;margin-bottom:14px;}
+  .cover-sub{font-size:16px;line-height:1.55;color:#f0e4d3;max-width:46ch;}
+  .cover-badges{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;}
+  .cover-badge{background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.3);color:#fff;font-size:12px;
+    padding:6px 12px;border-radius:99px;backdrop-filter:blur(4px);}
+
+  .eyebrow{color:var(--bordeaux);font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;}
+  h2.section-title{font-size:29px;font-style:italic;font-weight:600;line-height:1.2;margin-bottom:14px;}
+  .lede{font-size:15.5px;line-height:1.65;color:var(--ink-soft);margin-bottom:10px;}
+  .lede strong{color:var(--ink);}
+
+  /* TOC */
+  .toc-group{margin-top:10px;}
+  .toc-group h4{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--bordeaux);margin:20px 0 6px;}
+  .toc-list{list-style:none;}
+  .toc-list li{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;border-bottom:1px dotted var(--line);font-size:14.5px;}
+  .toc-list .toc-page{color:var(--ink-soft);font-size:12px;font-variant-numeric:tabular-nums;}
+
+  /* BOX */
+  .box{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--sage);border-radius:10px;
+    padding:16px 18px;margin:16px 0;font-size:14px;line-height:1.6;}
+  .box.bordeaux{border-left-color:var(--bordeaux);}
+  .box b{color:var(--bordeaux);}
+
+  /* QR CALLOUT */
+  .qr-callout{display:flex;gap:18px;align-items:center;background:var(--sage-pale);border-radius:12px;
+    padding:16px 18px;margin:16px 0;}
+  .qr-callout img{width:88px;height:88px;flex-shrink:0;border-radius:8px;background:#fff;padding:6px;border:1px solid var(--line);}
+  .qr-callout h4{font-size:14px;color:var(--sage-deep);margin-bottom:4px;}
+  .qr-callout p{font-size:12.5px;color:var(--ink-soft);line-height:1.5;max-width:none;}
+  .qr-callout .qr-link{font-size:11.5px;color:var(--bordeaux);font-weight:600;word-break:break-all;margin-top:4px;}
+
+  /* WEEK BANNER */
+  .week-banner{position:relative;height:240px;border-radius:var(--radius);overflow:hidden;margin-bottom:22px;box-shadow:var(--shadow);}
+  .week-banner img{width:100%;height:100%;object-fit:cover;}
+  .week-banner::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(46,35,32,0.75) 0%,rgba(46,35,32,0.05) 55%);}
+  .week-banner-text{position:absolute;left:22px;bottom:18px;z-index:2;color:#fff;}
+  .week-tag{font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--ivoire-deep);}
+  .week-banner-text h2{font-size:26px;font-style:italic;font-weight:600;margin-top:4px;}
+  .week-intro{font-size:14.5px;color:var(--ink-soft);line-height:1.6;margin-bottom:18px;}
+
+  /* DAY CARD */
+  .day-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-bottom:16px;}
+  .day-head{display:flex;align-items:baseline;gap:12px;margin-bottom:6px;flex-wrap:wrap;}
+  .day-num{font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:24px;color:var(--bordeaux);font-variant-numeric:tabular-nums;}
+  .day-msg{font-size:13.5px;color:var(--ink-soft);font-style:italic;flex:1;min-width:180px;}
+  .day-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;margin-top:12px;font-size:13.5px;}
+  .day-meal{padding:6px 0;border-bottom:1px dotted var(--line);}
+  .day-meal b{color:var(--bordeaux-deep);display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px;}
+  .day-foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:12px;border-top:1px solid var(--line);
+    font-size:12.5px;color:var(--sage-deep);flex-wrap:wrap;gap:8px;}
+  .day-foot .workout-tag{background:var(--sage-pale);padding:4px 10px;border-radius:99px;font-weight:700;}
+  .day-foot .tip{color:var(--ink-soft);font-style:italic;flex:1;min-width:200px;}
+
+  /* RECIPE BANK CARDS */
+  .recipe-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0 26px;}
+  .recipe-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;}
+  .recipe-card h4{font-size:14.5px;font-weight:700;font-family:'Manrope';font-style:normal;margin-bottom:8px;color:var(--bordeaux-deep);}
+  .recipe-card ul{padding-left:16px;font-size:12.5px;line-height:1.55;color:var(--ink-soft);margin-bottom:8px;}
+  .recipe-card .prep{font-size:12.5px;line-height:1.5;color:var(--ink);}
+  .recipe-card .prep b{color:var(--bordeaux);font-weight:700;}
+  .meal-label{display:inline-block;background:var(--sage-pale);color:var(--sage-deep);font-size:10.5px;font-weight:700;
+    letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:99px;margin-bottom:12px;}
+
+  /* WORKOUT TABLE */
+  .workout-table{width:100%;border-collapse:collapse;margin:14px 0 22px;font-size:13.5px;}
+  .workout-table th{text-align:left;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);
+    padding:9px 10px;border-bottom:2px solid var(--bordeaux);}
+  .workout-table td{padding:10px;border-bottom:1px solid var(--line);}
+  .workout-table td:first-child{font-weight:600;}
+  .workout-table td:last-child{font-variant-numeric:tabular-nums;color:var(--bordeaux-deep);font-weight:600;white-space:nowrap;}
+  .workout-name{font-size:15px;font-weight:700;font-family:'Playfair Display',serif;font-style:italic;margin:18px 0 4px;color:var(--bordeaux);}
+
+  /* SHOPPING LIST */
+  .shop-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:16px 0;}
+  .shop-col h4{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--bordeaux);margin-bottom:8px;}
+  .shop-col ul{list-style:none;font-size:13.5px;}
+  .shop-col li{padding:5px 0;border-bottom:1px dotted var(--line);display:flex;gap:8px;align-items:center;}
+  .shop-col li::before{content:"–";color:var(--sage-deep);}
+
+  /* STEP LIST (mindset/faq) */
+  .step-list{margin:16px 0;}
+  .step-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--line);}
+  .step-num{font-family:'Playfair Display',serif;font-style:italic;font-weight:600;font-size:20px;color:var(--bordeaux);flex-shrink:0;width:28px;}
+  .step-item h4{font-size:14.5px;margin-bottom:4px;}
+  .step-item p{font-size:13px;color:var(--ink-soft);line-height:1.55;}
+
+  /* FAQ */
+  .faq-item{padding:16px 0;border-bottom:1px solid var(--line);}
+  .faq-item h4{font-size:15px;color:var(--bordeaux-deep);margin-bottom:6px;}
+  .faq-item p{font-size:13.5px;color:var(--ink-soft);line-height:1.6;}
+
+  /* GLOSSARY */
+  .gloss-item{padding:12px 0;border-bottom:1px dotted var(--line);}
+  .gloss-item dt{font-weight:700;font-size:14px;color:var(--bordeaux-deep);}
+  .gloss-item dd{font-size:13px;color:var(--ink-soft);margin-top:2px;line-height:1.5;}
+
+  /* JOURNAL */
+  .journal-box{background:var(--sage-pale);border-radius:12px;padding:18px 20px;margin:16px 0;}
+  .journal-box h4{font-size:13.5px;color:var(--sage-deep);margin-bottom:10px;}
+  .journal-line{border-bottom:1px solid var(--line);height:26px;margin-bottom:8px;}
+
+  /* BONUS HEADER */
+  .bonus-header{background:var(--bordeaux);color:#fff;border-radius:var(--radius);padding:26px 24px;margin-bottom:22px;}
+  .bonus-header .eyebrow{color:var(--ivoire-deep);}
+  .bonus-header h2{font-size:25px;font-style:italic;font-weight:600;color:#fff;}
+  .bonus-header p{color:#f0e4d3;font-size:13.5px;margin-top:8px;}
+
+  .checklist{list-style:none;margin:16px 0;}
+  .checklist li{display:flex;align-items:flex-start;gap:10px;padding:8px 0;font-size:13.5px;border-bottom:1px solid var(--line);}
+  .checklist .box-icon{width:16px;height:16px;border:2px solid var(--bordeaux);border-radius:4px;flex-shrink:0;margin-top:2px;}
+
+  .closing{background:var(--sage-pale);}
+  .disclaimer{font-size:11.5px;line-height:1.6;color:var(--ink-soft);margin-top:20px;padding-top:20px;border-top:1px solid var(--line);}
+
+  @media print{ body{background:#fff;} .page{max-width:none;} .sheet{page-break-after:always;padding:30px;} .cover{height:100vh;} }
+  @media (max-width:600px){
+    .sheet{padding:34px 20px;} .recipe-grid,.shop-grid,.day-grid{grid-template-columns:1fr;} .cover h1{font-size:30px;}
+    .qr-callout{flex-direction:column;text-align:center;}
+  }
+</style>
+</head>
+<body>
+<div class="page" id="app">
+
+  <!-- CAPA -->
+  <section class="cover">
+    <img src="images/hero-noiva-espelho.jpg" alt="Noiva se olhando no espelho, confiante">
+    <div class="cover-content">
+      <div class="cover-eyebrow">Guia Oficial do Desafio</div>
+      <h1 class="serif">Desafio Shape de Noiva<br>21 Dias</h1>
+      <p class="cover-sub">O plano completo — dia a dia — de alimentação, treino, preparo e equilíbrio emocional pra você chegar no altar se sentindo exatamente como sempre imaginou.</p>
+      <div class="cover-badges">
+        <span class="cover-badge">21 dias guiados</span>
+        <span class="cover-badge">45+ receitas</span>
+        <span class="cover-badge">Lista de compras inclusa</span>
+        <span class="cover-badge">Kit anti-ansiedade</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CARTA DE BOAS-VINDAS -->
+  <section class="sheet">
+    <div class="eyebrow">Carta de Boas-Vindas</div>
+    <h2 class="section-title">Antes de Tudo, Respira Comigo</h2>
+    <p class="lede">Se você chegou até aqui, provavelmente já tentou de tudo — dieta, chá, promessa de segunda-feira que não durou até quarta. Não é falta de disciplina. É que ninguém nunca te deu um plano desenhado <strong>especificamente pra essa fase</strong>: os últimos dias antes do casamento, quando a ansiedade dos preparativos briga com a vontade de se sentir bem no vestido.</p>
+    <p class="lede">Esse guia existe pra resolver exatamente isso. Não é sobre restrição extrema nem sobre virar outra pessoa em 21 dias — é sobre um plano estruturado, com começo, meio e fim, que trata sua alimentação, seu corpo <strong>e</strong> sua cabeça ao mesmo tempo.</p>
+    <p class="lede">Cada um dos 21 dias tem: o que comer, o que treinar (ou descansar — descanso também faz parte), uma dica prática e um espaço pra você registrar como está se sentindo. Não pule etapas. A ordem existe por um motivo.</p>
+
+    <div class="box bordeaux">
+      <b>Como usar este guia:</b> siga a ordem dos dias. No fim de cada semana você encontra o banco completo de receitas usadas (com o preparo detalhado) e a lista de compras — organize seu mercado com antecedência, isso sozinho já evita metade das desculpas pra pular refeição.
+    </div>
+
+    <div class="qr-callout">
+      <img src="images/qr-checklist.png" alt="QR code para o checklist interativo">
+      <div>
+        <h4>Prefere marcar do celular?</h4>
+        <p>Este PDF é pra imprimir e colar na geladeira. Mas se preferir marcar direto do celular — com progresso salvo automaticamente, sem precisar de caneta — escaneie o código ao lado ou acesse:</p>
+        <p class="qr-link">claude.ai/code/artifact/16c33357-d22d-4d8d-a074-f35ca4ae650e</p>
+      </div>
+    </div>
+
+    <div class="toc-group">
+      <h4>Sumário</h4>
+      <ul class="toc-list">
+        <li><span>Semana 0 — Antes de Começar</span><span class="toc-page">Preparação</span></li>
+        <li><span>Capítulo Mentalidade — Sua Cabeça Antes do Seu Corpo</span><span class="toc-page">—</span></li>
+        <li><span>Semana 1 — Choque Anti-Inchaço</span><span class="toc-page">Dias 1–7</span></li>
+        <li><span>Semana 2 — Intensifica</span><span class="toc-page">Dias 8–14</span></li>
+        <li><span>Semana 3 — Reta Final / Prova do Vestido</span><span class="toc-page">Dias 15–21</span></li>
+        <li><span>Bônus — Kit Anti-Ansiedade Pré-Casamento</span><span class="toc-page">—</span></li>
+        <li><span>Ritual da Véspera</span><span class="toc-page">—</span></li>
+        <li><span>Perguntas Frequentes</span><span class="toc-page">—</span></li>
+        <li><span>Glossário</span><span class="toc-page">—</span></li>
+        <li><span>Depois do Grande Dia</span><span class="toc-page">Manutenção</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SEMANA 0 -->
+  <section class="sheet">
+    <div class="eyebrow">Semana 0</div>
+    <h2 class="section-title">Antes de Começar</h2>
+    <p class="lede">Os primeiros 3 dias de qualquer desafio se decidem antes do Dia 1. Separe 20 minutos pra fazer isso agora — vai evitar que você pule refeição por não ter o que comer em casa.</p>
+
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div><h4>Faça a primeira compra</h4><p>Use a lista de compras da Semana 1 (no fim do capítulo dela) como base. Compre com 1-2 dias de antecedência do seu Dia 1.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div><h4>Separe potes de vidro ou plástico</h4><p>Facilita montar as refeições com antecedência (meal prep) e evita a desculpa de "não tenho tempo de cozinhar todo dia".</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div><h4>Escolha seu horário de treino</h4><p>Não precisa ser de manhã. Escolha o horário que você realmente vai cumprir — o melhor treino é o que acontece, não o "ideal" que fica só no plano.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div><h4>Marque seu Dia 1 no calendário</h4><p>De preferência um dia sem evento social grande. Comece numa segunda ou num dia de rotina normal, não depois de uma festa.</p></div>
+      </div>
+    </div>
+
+    <div class="box">
+      <b>Dica de preparo (meal prep):</b> reserve 1 hora no domingo pra cozinhar em quantidade: grelhe todo o frango da semana de uma vez, cozinhe os legumes, deixe os ovos já cozidos na geladeira. Isso sozinho resolve 70% do "não vou ter tempo de cozinhar".
+    </div>
+  </section>
+
+  <!-- CAPÍTULO MENTALIDADE -->
+  <section class="sheet">
+    <div class="eyebrow">Capítulo Mentalidade</div>
+    <h2 class="section-title">Sua Cabeça Antes do Seu Corpo</h2>
+    <p class="lede">Ninguém fala sobre isso o suficiente: casamento mexe mais com a cabeça do que com o corpo. E é a cabeça bagunçada que sabota o corpo — não o contrário.</p>
+
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div><h4>A ansiedade não é fraqueza, é sinal</h4><p>Comer por ansiedade nos preparativos é um padrão reconhecido — não é falta de força de vontade. Quando você reconhece isso, para de se culpar e começa a agir.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div><h4>Comparação é ladrão de paz</h4><p>Toda noiva se compara com fotos de Instagram de outras noivas. Lembre: você está vendo o resultado editado de meses de trabalho de outra pessoa, não o processo real dela.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div><h4>Opinião de família e amigos é ruído, não verdade</h4><p>"Você já emagreceu?", "falta pouco, hein" — frases assim, ditas com boa intenção, pesam. Você não deve satisfação do seu processo a ninguém além de você mesma.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div><h4>O objetivo não é perfeição, é chegar em paz</h4><p>Nenhuma noiva "perfeita" existe no espelho — existe uma noiva em paz com o processo que ela fez. É isso que muda a foto, mais do que qualquer número na balança.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEMANAS: injetadas via JS -->
+  <div id="weeks-container"></div>
+
+  <!-- BÔNUS -->
+  <section class="sheet">
+    <div class="bonus-header">
+      <div class="eyebrow">Bônus incluso</div>
+      <h2 class="serif">Kit Anti-Ansiedade Pré-Casamento</h2>
+      <p>Porque o problema nunca foi só a comida — foi a ansiedade que leva até ela.</p>
+    </div>
+
+    <div style="display:flex;gap:20px;align-items:center;margin-bottom:10px;flex-wrap:wrap;">
+      <img src="images/meditacao-respiracao.jpg" alt="Mulher respirando calmamente" style="width:100%;max-width:260px;border-radius:12px;box-shadow:var(--shadow);">
+      <div style="flex:1;min-width:220px;">
+        <p class="lede">Cinco ferramentas simples, práticas, que você usa em segundos quando sentir a ansiedade dos preparativos tomando conta.</p>
+      </div>
+    </div>
+
+    <div class="step-list">
+      <div class="step-item"><div class="step-num">1</div><div><h4>Respiração 4-7-8</h4><p>Inspire pelo nariz contando até 4. Segure contando até 7. Solte pela boca contando até 8. Repita 4 vezes. Funciona em qualquer lugar — na fila do fornecedor, antes de dormir, no meio de uma crise sobre a lista de convidados.</p></div></div>
+      <div class="step-item"><div class="step-num">2</div><div><h4>Pausa de 60 segundos antes de beliscar</h4><p>Antes de comer por ansiedade, pare 1 minuto. Beba um copo de água. Respire 3 vezes fundo. Pergunte: "estou com fome de verdade, ou ansiosa?". Se ainda quiser comer, coma — devagar, sentada, sem culpa.</p></div></div>
+      <div class="step-item"><div class="step-num">3</div><div><h4>Ritual noturno anti-ansiedade</h4><p>10 minutos sem celular antes de dormir. Escreva 3 coisas que deram certo no dia. Chá de camomila, se gostar. O cérebro aprende que a noite é hora de desacelerar.</p></div></div>
+      <div class="step-item"><div class="step-num">4</div><div><h4>A técnica dos 5 sentidos</h4><p>Quando a ansiedade subir rápido: nomeie 5 coisas que vê, 4 que ouve, 3 que sente ao toque, 2 que cheira, 1 que sente o gosto. Tira o cérebro do "modo pânico" em menos de 2 minutos.</p></div></div>
+      <div class="step-item"><div class="step-num">5</div><div><h4>Frase-âncora</h4><p>Escolha uma frase curta pra repetir quando a ansiedade bater: "eu já fiz o trabalho, agora é confiar". Repita 3 vezes, em voz baixa ou na cabeça — parece simples, mas interrompe o ciclo de pensamento acelerado.</p></div></div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="sheet">
+    <div class="eyebrow">Antes de qualquer dúvida</div>
+    <h2 class="section-title">Perguntas Frequentes</h2>
+
+    <div class="faq-item"><h4>Posso pular um dia se tiver um evento social?</h4><p>Sim. Pule o cardápio daquele dia sem culpa, coma com moderação no evento, e volte pro plano no dia seguinte. Um dia fora do plano não desfaz o desafio — desistir depois dele, sim.</p></div>
+    <div class="faq-item"><h4>E se eu não gostar de algum ingrediente da receita?</h4><p>Troque por um equivalente: peixe por frango, brócolis por couve-flor, quinoa por arroz integral. O importante é manter a proporção proteína + vegetal + carboidrato leve, não o ingrediente exato.</p></div>
+    <div class="faq-item"><h4>Preciso fazer o treino todos os dias?</h4><p>Não — o plano já inclui dias de descanso ativo (alongamento) de propósito. Descanso faz parte do resultado, não é "furar" o desafio.</p></div>
+    <div class="faq-item"><h4>Posso beber álcool durante o desafio?</h4><p>Evite nos dias de treino intenso. Em eventos sociais inevitáveis, prefira 1 taça de vinho a coquetéis açucarados, e beba água entre os goles.</p></div>
+    <div class="faq-item"><h4>Tenho alguma restrição alimentar (lactose, glúten). Posso seguir o plano?</h4><p>Sim, com adaptações: troque leite/iogurte por versões vegetais, e pão/tortilha por versões sem glúten. As proporções e a lógica do plano continuam as mesmas.</p></div>
+    <div class="faq-item"><h4>Quanto tempo depois do desafio verei diferença?</h4><p>Cada pessoa responde de um jeito. O objetivo do desafio é consistência de hábito em 21 dias — não uma promessa de número exato. Resultados individuais variam.</p></div>
+    <div class="faq-item"><h4>Posso repetir o desafio depois dos 21 dias?</h4><p>Sim — muitas noivas repetem a Semana 3 (Reta Final) na última semana antes do casamento, mesmo que já tenham terminado o ciclo completo antes.</p></div>
+    <div class="faq-item"><h4>Isso substitui acompanhamento de nutricionista?</h4><p>Não. Este é um guia educacional de hábitos gerais. Se tiver alguma condição de saúde, consulte um profissional antes de começar.</p></div>
+  </section>
+
+  <!-- GLOSSÁRIO -->
+  <section class="sheet">
+    <div class="eyebrow">Pra você não ficar em dúvida</div>
+    <h2 class="section-title">Glossário</h2>
+    <dl>
+      <div class="gloss-item"><dt>Retenção de líquido</dt><dd>Acúmulo de água no corpo, comum por excesso de sódio ou parada prolongada — causa a sensação de inchaço, diferente de gordura.</dd></div>
+      <div class="gloss-item"><dt>Descanso ativo</dt><dd>Dia sem treino intenso, mas com movimento leve (alongamento, caminhada) — ajuda o corpo a recuperar sem parar completamente.</dd></div>
+      <div class="gloss-item"><dt>Meal prep</dt><dd>Preparar refeições com antecedência (geralmente 1x por semana) pra economizar tempo nos dias corridos.</dd></div>
+      <div class="gloss-item"><dt>Circuito</dt><dd>Sequência de exercícios feitos um após o outro, com pouco ou nenhum descanso entre eles, repetida em "voltas".</dd></div>
+      <div class="gloss-item"><dt>Proteína magra</dt><dd>Fontes de proteína com pouca gordura saturada — frango sem pele, peixe branco, claras de ovo, tofu.</dd></div>
+      <div class="gloss-item"><dt>Fibra</dt><dd>Parte dos vegetais/grãos que o corpo não digere totalmente — ajuda na saciedade e no funcionamento intestinal.</dd></div>
+      <div class="gloss-item"><dt>Prancha</dt><dd>Exercício isométrico (sem movimento) de sustentação do corpo em linha reta, apoiado nos antebraços e pontas dos pés.</dd></div>
+      <div class="gloss-item"><dt>Ritual da véspera</dt><dd>Conjunto de ações recomendadas na noite anterior ao casamento, focado em descanso e calma, não em performance.</dd></div>
+    </dl>
+  </section>
+
+  <!-- DEPOIS DO GRANDE DIA -->
+  <section class="sheet closing">
+    <div class="eyebrow">Última seção</div>
+    <h2 class="section-title">Depois do Grande Dia</h2>
+    <p class="lede">O casamento acaba, mas os hábitos que você construiu nessas 3 semanas não precisam acabar com ele. Aqui vai como manter o que funcionou, sem virar mais uma obrigação na sua vida:</p>
+
+    <ul class="checklist" style="margin-top:16px;">
+      <li><span class="box-icon"></span>Mantenha a água morna com limão pela manhã — é o hábito mais fácil de continuar</li>
+      <li><span class="box-icon"></span>Volte ao treino 2-3x por semana, sem cobrança de intensidade</li>
+      <li><span class="box-icon"></span>Use o banco de receitas deste guia como base pro dia a dia, não só pro desafio</li>
+      <li><span class="box-icon"></span>Releia o Capítulo Mentalidade sempre que a ansiedade voltar — ela não é exclusiva de casamento</li>
+    </ul>
+
+    <p class="lede" style="margin-top:20px;"><strong>Você chegou até aqui.</strong> Isso já diz muito sobre a mulher que você é — e sobre a esposa que vai ser: alguém que se compromete e termina o que começa.</p>
+
+    <div class="disclaimer">
+      <b>Aviso importante:</b> resultados individuais podem variar. Este material tem caráter educacional e não substitui acompanhamento médico ou nutricional — consulte um profissional de saúde antes de iniciar qualquer programa de alimentação ou exercícios, especialmente se tiver alguma condição pré-existente.
+      <br><br>
+      © Desafio Shape de Noiva — Guia de uso pessoal. Não é permitida a redistribuição deste material.
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* =====================================================================
+   DESAFIO SHAPE DE NOIVA — Motor de conteúdo dia a dia
+   Gera as 3 semanas (21 dias) a partir de bancos de dados de receitas,
+   treinos e mensagens — evita repetição de HTML e garante consistência.
+   ===================================================================== */
+
+const recipeBanks = {
+  1: {
+    cafe: [
+      {n:'Omelete de claras com espinafre', ing:['3 claras + 1 ovo inteiro','1 punhado de espinafre','5 tomates-cereja','sal, pimenta e orégano'], prep:'Bata os ovos, misture o espinafre picado e os tomates cortados, tempere e frite em frigideira antiaderente por 4 min de cada lado.'},
+      {n:'Vitamina verde detox', ing:['1 folha de couve','½ maçã verde','suco de 1 limão','200ml água de coco','gengibre a gosto'], prep:'Bata tudo no liquidificador até ficar homogêneo. Beba na hora.'},
+      {n:'Mingau de aveia com canela e maçã', ing:['4 col. de sopa de aveia em flocos','200ml leite ou bebida vegetal','canela a gosto','½ maçã picada'], prep:'Cozinhe a aveia no leite em fogo baixo por 5 min mexendo sempre, finalize com canela e maçã.'},
+      {n:'Torrada integral com abacate e ovo pochê', ing:['1 fatia de pão integral','¼ de abacate amassado','1 ovo','limão e pimenta'], prep:'Toste o pão, espalhe o abacate temperado com limão, cubra com o ovo pochê (cozido em água fervente com um fio de vinagre por 3 min).'},
+    ],
+    almoco: [
+      {n:'Frango grelhado com brócolis e batata-doce', ing:['150g peito de frango','1 xícara de brócolis no vapor','100g batata-doce cozida','alho e limão'], prep:'Tempere o frango com alho e limão, grelhe 6 min de cada lado. Sirva com o brócolis e a batata-doce.'},
+      {n:'Salada de grão-de-bico', ing:['1 xícara de grão-de-bico cozido','pepino e tomate picados','cebola roxa','azeite, limão e sal'], prep:'Misture tudo, tempere com azeite e limão na hora de servir.'},
+      {n:'Sopa cremosa de abóbora com gengibre', ing:['2 xícaras de abóbora cozida','gengibre a gosto','caldo de legumes','1 col. de leite de coco light'], prep:'Bata a abóbora com o caldo e o gengibre, aqueça e finalize com o leite de coco.'},
+      {n:'Peixe branco ao forno com purê de couve-flor', ing:['150g filé de peixe branco','1 xícara de couve-flor','azeite, alho e ervas'], prep:'Asse o peixe temperado a 200°C por 15 min. Cozinhe e amasse a couve-flor com azeite e alho até virar purê.'},
+    ],
+    lanche: [
+      {n:'Castanhas + fruta', ing:['10 castanhas (do Pará ou caju)','1 fruta a sua escolha'], prep:'Sem preparo — direto da embalagem, sem exagerar na quantidade.'},
+      {n:'Chá verde gelado com hortelã', ing:['1 saquinho de chá verde','folhas de hortelã','gelo'], prep:'Prepare o chá, deixe esfriar, sirva com gelo e hortelã fresca.'},
+      {n:'Palitos de pepino com pasta de abacate', ing:['1 pepino em palitos','¼ de abacate amassado com limão e sal'], prep:'Amasse o abacate temperado e sirva com os palitos de pepino pra molhar.'},
+    ],
+    jantar: [
+      {n:'Sopa de legumes com frango desfiado', ing:['frango desfiado','abobrinha, cenoura, chuchu','caldo caseiro','sal e cheiro-verde'], prep:'Cozinhe os legumes no caldo por 15 min, adicione o frango desfiado nos últimos 5 min.'},
+      {n:'Salada morna de quinoa com legumes assados', ing:['1 xícara de quinoa cozida','abobrinha e pimentão assados','azeite e limão'], prep:'Misture a quinoa com os legumes ainda mornos, tempere com azeite e limão.'},
+      {n:'Omelete de claras com aspargos', ing:['4 claras','maço de aspargos','sal e pimenta'], prep:'Cozinhe os aspargos rapidamente no vapor, bata as claras e frite com os aspargos por cima.'},
+      {n:'Caldo verde leve', ing:['couve fatiada fina','batata cozida e amassada','pouco azeite','sal'], prep:'Cozinhe a batata no caldo, amasse, adicione a couve nos últimos 3 min e finalize com azeite.'},
+    ],
+  },
+  2: {
+    cafe: [
+      {n:'Panqueca de banana e aveia', ing:['1 banana amassada','2 ovos','3 col. de aveia em flocos'], prep:'Misture tudo até virar uma massa homogênea, frite pequenas porções em frigideira antiaderente.'},
+      {n:'Iogurte com chia e frutas vermelhas', ing:['200g iogurte natural','1 col. de chia','morango ou framboesa a gosto'], prep:'Misture a chia no iogurte, deixe descansar 5 min, adicione as frutas.'},
+      {n:'Wrap de omelete com queijo cottage', ing:['2 ovos batidos','2 col. de queijo cottage','folhas verdes'], prep:'Faça uma panqueca fina com os ovos, recheie com o cottage e as folhas, enrole.'},
+      {n:'Smoothie de proteína com frutas vermelhas', ing:['1 scoop de whey ou 2 col. de iogurte grego','frutas vermelhas congeladas','200ml leite ou bebida vegetal'], prep:'Bata tudo no liquidificador até ficar cremoso.'},
+    ],
+    almoco: [
+      {n:'Salmão assado com aspargos', ing:['150g salmão','maço de aspargos','ervas finas, azeite e limão'], prep:'Tempere e leve ao forno a 200°C por 15-18 min junto com os aspargos.'},
+      {n:'Wrap integral de frango desfiado', ing:['1 tortilha integral','frango desfiado temperado','alface, tomate e molho de iogurte'], prep:'Monte o wrap com todos os ingredientes e enrole firme.'},
+      {n:'Bife de patinho com arroz integral e salada', ing:['120g bife de patinho grelhado','4 col. de arroz integral','salada verde à vontade'], prep:'Grelhe o bife temperado com alho, sirva com o arroz e a salada temperada.'},
+      {n:'Bowl de quinoa com grão-de-bico e legumes', ing:['quinoa cozida','grão-de-bico','pepino, tomate, pimentão','azeite e limão'], prep:'Monte o bowl com todos os ingredientes, tempere na hora de servir.'},
+    ],
+    lanche: [
+      {n:'Palitos de legumes com homus', ing:['cenoura e pepino em palitos','2 col. de homus'], prep:'Corte os legumes em palitos, sirva com o homus pra molhar.'},
+      {n:'Iogurte com granola sem açúcar', ing:['150g iogurte natural','2 col. de granola sem açúcar'], prep:'Misture na hora de comer pra manter a crocância.'},
+      {n:'Ovo cozido + torrada de arroz', ing:['1 ovo cozido','2 torradas de arroz'], prep:'Sem preparo — combinação prática de proteína e carboidrato leve.'},
+    ],
+    jantar: [
+      {n:'Peixe grelhado com legumes refogados', ing:['filé de peixe branco','abobrinha e cenoura em fatias','azeite e alho'], prep:'Grelhe o peixe 4 min de cada lado, refogue os legumes no azeite com alho.'},
+      {n:'Frango ao curry leve com arroz integral', ing:['frango em cubos','curry em pó','leite de coco light','arroz integral'], prep:'Refogue o frango, adicione o curry e o leite de coco, cozinhe 10 min. Sirva com arroz.'},
+      {n:'Salada completa com atum', ing:['folhas verdes variadas','1 lata de atum ao natural','tomate, pepino, ovo cozido'], prep:'Monte a salada e tempere com azeite e limão.'},
+      {n:'Omelete de forno com legumes', ing:['4 ovos batidos','abobrinha e cenoura ralada','queijo branco a gosto'], prep:'Misture tudo, leve ao forno em forma untada a 180°C por 20 min.'},
+    ],
+  },
+  3: {
+    cafe: [
+      {n:'Vitamina verde (repita da Semana 1)', ing:['1 folha de couve, ½ maçã verde','suco de 1 limão','200ml água de coco'], prep:'Bata tudo e beba na hora. Ótimo pra desinchar antes de eventos.'},
+      {n:'Iogurte grego com morangos', ing:['150g iogurte grego natural','morangos picados','1 fio de mel (opcional)'], prep:'Misture na hora de comer.'},
+      {n:'Omelete simples de claras', ing:['3 claras','sal e ervas a gosto'], prep:'Bata e frite em frigideira antiaderente, sem óleo em excesso.'},
+    ],
+    almoco: [
+      {n:'Salada completa com atum', ing:['folhas verdes variadas','1 lata de atum ao natural','tomate, pepino, ovo cozido'], prep:'Monte a salada e tempere com azeite e limão.'},
+      {n:'Peixe branco grelhado com legumes no vapor', ing:['150g peixe branco','brócolis e cenoura no vapor'], prep:'Grelhe o peixe temperado, sirva com os legumes no vapor.'},
+      {n:'Frango desfiado com salada de folhas', ing:['frango desfiado temperado','folhas verdes variadas','azeite e limão'], prep:'Misture tudo e sirva fresco.'},
+    ],
+    lanche: [
+      {n:'Ovo cozido + queijo branco', ing:['1 ovo cozido','1 fatia de queijo branco'], prep:'Sem preparo especial — combinação prática e leve.'},
+      {n:'Água de coco + castanhas', ing:['200ml água de coco','6 castanhas'], prep:'Sem preparo.'},
+    ],
+    jantar: [
+      {n:'Omelete simples com salada verde', ing:['2 ovos','folhas verdes a gosto','azeite e limão'], prep:'Frite o omelete simples, sirva com a salada temperada ao lado.'},
+      {n:'Sopa leve de legumes', ing:['abobrinha, chuchu, cenoura','caldo de legumes caseiro'], prep:'Cozinhe todos os legumes no caldo por 15-20 min até ficarem macios.'},
+      {n:'Peixe branco ao forno com aspargos', ing:['filé de peixe branco','maço de aspargos','limão e ervas'], prep:'Asse tudo junto a 200°C por 15 min.'},
+    ],
+  }
+};
+
+const workouts = {
+  '1A': {nome:'Semana 1 · Treino A — Ativação', itens:[
+    ['Alongamento corpo inteiro','Movimentos lentos, sem forçar','5 min'],
+    ['Agachamento livre','Pés na largura do quadril, desça como se fosse sentar','3×12'],
+    ['Prancha','Corpo reto, cotovelos no chão','3×20seg'],
+    ['Elevação de quadril (ponte)','Deitada, eleve o quadril contraindo o glúteo','3×15'],
+  ]},
+  '1B': {nome:'Semana 1 · Treino B — Mobilidade', itens:[
+    ['Marcha estacionária','Elevando o joelho, ritmo constante','3 min'],
+    ['Agachamento sumô','Pés afastados, pontas pra fora','3×12'],
+    ['Prancha lateral','Apoiada em um antebraço, corpo alinhado','2×15seg cada lado'],
+    ['Alongamento de quadril e lombar','Movimentos suaves, sem pressa','5 min'],
+  ]},
+  'descanso': {nome:'Descanso Ativo — Alongamento', itens:[
+    ['Alongamento de pernas', 'Sentada, tente tocar a ponta do pé sem forçar', '3 min'],
+    ['Alongamento de ombros e pescoço', 'Movimentos circulares lentos', '3 min'],
+    ['Respiração consciente', 'Deitada, mão na barriga, respire fundo', '5 min'],
+  ]},
+  '2A': {nome:'Semana 2 · Treino A — Circuito', itens:[
+    ['Agachamento com salto','Agache e impulsione pra cima','3×12'],
+    ['Afundo alternado','Passo à frente, desça alternando as pernas','3×12 cada perna'],
+    ['Prancha com toque no ombro','Prancha alta, toque o ombro oposto','3×15'],
+    ['Abdominal bicicleta','Deitada, pedale trazendo cotovelo ao joelho oposto','3×20'],
+  ]},
+  '2B': {nome:'Semana 2 · Treino B — Força', itens:[
+    ['Agachamento búlgaro (com apoio)','Um pé apoiado atrás em uma cadeira, desça com o da frente','3×10 cada perna'],
+    ['Prancha lateral com elevação de quadril','Apoiada de lado, eleve e desça o quadril','3×12 cada lado'],
+    ['Elevação de panturrilha','Em pé, suba na ponta dos pés','3×20'],
+    ['Superman','Deitada de bruços, eleve braços e pernas ao mesmo tempo','3×12'],
+  ]},
+  '3A': {nome:'Semana 3 · Treino A — Tonificação Final', itens:[
+    ['Circuito revisão (Semana 2)','Repita os exercícios da semana 2 com menos descanso','2 voltas'],
+    ['Superman','Deitada de bruços, eleve braços e pernas','3×12'],
+    ['Prancha (postura pro vestido)','Foco em manter a coluna reta','3×25seg'],
+  ]},
+  '3B': {nome:'Semana 3 · Treino B — Leve e Postura', itens:[
+    ['Agachamento livre lento','Foco na execução, não na velocidade','3×10'],
+    ['Prancha','Sustente o máximo que conseguir com boa forma','2×20seg'],
+    ['Alongamento completo final','Sem pressa, foco em relaxar — não intensificar','8 min'],
+  ]},
+};
+
+const dailyMessages = [
+  "Hoje é só o primeiro passo. Ele já vale.",
+  "Você não precisa ser perfeita hoje, só precisa aparecer.",
+  "O inchaço de hoje não é o corpo de amanhã.",
+  "Beba água antes de qualquer decisão sobre comida.",
+  "Descansar também é treinar.",
+  "Metade da semana. Você já provou que consegue manter.",
+  "Fechando a Semana 1 — sinta a diferença, não só veja.",
+  "Nova semana, mesma decisão: continuar.",
+  "Força não é não sentir cansaço, é continuar sentindo e ir mesmo assim.",
+  "Compare-se só com a você de 8 dias atrás.",
+  "Hoje o treino pede mais. Você também consegue dar mais.",
+  "Ansiedade nos preparativos? Volte pro Capítulo Mentalidade.",
+  "Metade da Semana 2. O hábito já começou a virar rotina.",
+  "Fechando mais uma semana. Look no espelho — de verdade, olhe.",
+  "Última semana. Aqui o jogo é afinar, não sofrer.",
+  "Cuidado com a pressa de última hora — consistência ainda ganha.",
+  "Você está mais perto do que imagina.",
+  "Metade da reta final. Respire e confie no processo.",
+  "Poucos dias. Durma bem — é parte do resultado.",
+  "Amanhã é véspera. Hoje é sobre calma, não sobre esforço extra.",
+  "Chegou. Releia o Ritual da Véspera antes de dormir hoje.",
+];
+
+const dailyTips = [
+  "Separe a roupa de treino na noite anterior — reduz desculpa.",
+  "Se bater fome fora de hora, beba água antes de decidir.",
+  "Evite sal em excesso hoje — ele é o maior vilão do inchaço.",
+  "Durma 30 min mais cedo hoje, se conseguir.",
+  "Caminhe 10 min ao ar livre, mesmo no dia de descanso.",
+  "Tire uma foto de progresso — não pra postar, só pra você.",
+  "Releia sua carta de boas-vindas antes de começar a próxima semana.",
+  "Prepare 2 refeições adiantadas hoje, se puder.",
+  "Troque um café por um chá verde hoje.",
+  "Anote 1 coisa que ficou mais fácil essa semana.",
+  "Se o treino cansar mais, tudo bem — é sinal de progresso.",
+  "Use a técnica dos 5 sentidos se a ansiedade aparecer hoje.",
+  "Beba um copo de água extra antes de cada refeição.",
+  "Comemore terminar mais uma semana — genuinamente.",
+  "Essa semana, foque em manter o que já funciona.",
+  "Evite provar roupa nova essa semana — espere o resultado assentar.",
+  "Priorize sono sobre treino extra, se tiver que escolher.",
+  "Escreva como você quer se sentir no grande dia.",
+  "Separe o look da véspera com antecedência — menos estresse depois.",
+  "Hidrate a pele também — parte do ritual, não só a comida.",
+  "Confie. Você fez o trabalho.",
+];
+
+// Atribuição dia a dia: quais índices de receita e qual treino cada dia usa
+const dayPlan = [
+  // Semana 1 (dias 1-7)
+  {cafe:0, almoco:0, lanche:0, jantar:0, workout:'1A'},
+  {cafe:1, almoco:1, lanche:1, jantar:1, workout:'descanso'},
+  {cafe:2, almoco:2, lanche:2, jantar:2, workout:'1B'},
+  {cafe:3, almoco:3, lanche:0, jantar:3, workout:'1A'},
+  {cafe:0, almoco:0, lanche:1, jantar:0, workout:'descanso'},
+  {cafe:1, almoco:1, lanche:2, jantar:1, workout:'1B'},
+  {cafe:2, almoco:2, lanche:0, jantar:2, workout:'descanso'},
+  // Semana 2 (dias 8-14)
+  {cafe:0, almoco:0, lanche:0, jantar:0, workout:'2A'},
+  {cafe:1, almoco:1, lanche:1, jantar:1, workout:'2B'},
+  {cafe:2, almoco:2, lanche:2, jantar:2, workout:'descanso'},
+  {cafe:3, almoco:3, lanche:0, jantar:3, workout:'2A'},
+  {cafe:0, almoco:0, lanche:1, jantar:0, workout:'2B'},
+  {cafe:1, almoco:1, lanche:2, jantar:1, workout:'descanso'},
+  {cafe:2, almoco:2, lanche:0, jantar:2, workout:'2A'},
+  // Semana 3 (dias 15-21)
+  {cafe:0, almoco:0, lanche:0, jantar:0, workout:'3A'},
+  {cafe:1, almoco:1, lanche:1, jantar:1, workout:'descanso'},
+  {cafe:2, almoco:0, lanche:0, jantar:2, workout:'3B'},
+  {cafe:0, almoco:1, lanche:1, jantar:0, workout:'descanso'},
+  {cafe:1, almoco:2, lanche:0, jantar:1, workout:'3A'},
+  {cafe:2, almoco:0, lanche:1, jantar:2, workout:'descanso'},
+  {cafe:0, almoco:1, lanche:0, jantar:0, workout:'3B'},
+];
+
+const weekMeta = [
+  {n:1, dias:'Dias 1–7', titulo:'Semana 1 — Choque Anti-Inchaço', img:'bowl-salada.jpg',
+   intro:'O objetivo aqui não é "emagrecer rápido" — é reduzir inchaço e retenção de líquido pra você ver diferença já nos primeiros dias. Isso constrói a confiança que sustenta as próximas duas semanas.',
+   ritual:'Ritual diário obrigatório: assim que acordar, beba 500ml de água morna com suco de ½ limão, antes do café. Feito todo santo dia, nas 3 semanas.'},
+  {n:2, dias:'Dias 8–14', titulo:'Semana 2 — Intensifica', img:'comida-saudavel.jpg',
+   intro:'O corpo já respondeu ao choque inicial. Agora é hora de trabalhar de verdade: mais proteína e fibra no prato, mais intensidade no treino. É a semana em que o hábito se firma.',
+   ritual:null},
+  {n:3, dias:'Dias 15–21', titulo:'Semana 3 — Reta Final / Prova do Vestido', img:'resultado-noiva-floresta.jpg',
+   intro:'Últimos ajustes. O foco muda: menos "treino pesado", mais afinação — e preparar a cabeça pro grande dia, não só o corpo.',
+   ritual:null},
+];
+
+const shoppingLists = {
+  1: {proteinas:['Peito de frango (600g)','Ovos (1 dúzia)','Peixe branco (300g)','Claras (1 caixa)'],
+      vegetais:['Espinafre','Brócolis','Tomate-cereja','Pepino','Abobrinha','Cenoura','Chuchu','Couve','Aspargos'],
+      graos:['Batata-doce','Aveia em flocos','Pão integral'],
+      outros:['Limão (6 unid.)','Gengibre','Água de coco','Castanhas','Abacate','Grão-de-bico (lata ou seco)']},
+  2: {proteinas:['Salmão (300g)','Frango desfiado (500g)','Bife de patinho (300g)','Whey ou iogurte grego'],
+      vegetais:['Aspargos','Pimentão','Grão-de-bico','Frutas vermelhas (congeladas ok)','Salada variada'],
+      graos:['Arroz integral','Quinoa','Aveia em flocos','Tortilha integral'],
+      outros:['Homus','Granola sem açúcar','Curry em pó','Leite de coco light','Queijo cottage']},
+  3: {proteinas:['Atum em lata (2 unid.)','Peixe branco (300g)','Ovos (1 dúzia)','Frango desfiado (300g)'],
+      vegetais:['Folhas verdes variadas','Brócolis','Cenoura','Aspargos','Abobrinha','Chuchu'],
+      graos:['—'],
+      outros:['Iogurte grego','Morangos','Água de coco','Castanhas','Queijo branco']},
+};
+
+function buildDayCard(dayNum, plan, bank){
+  const c = bank.cafe[plan.cafe], a = bank.almoco[plan.almoco], l = bank.lanche[plan.lanche], j = bank.jantar[plan.jantar];
+  const w = workouts[plan.workout];
+  const isRest = plan.workout === 'descanso';
+  return `
+  <div class="day-card">
+    <div class="day-head">
+      <span class="day-num">Dia ${dayNum}</span>
+      <span class="day-msg">"${dailyMessages[dayNum-1]}"</span>
+    </div>
+    <div class="day-grid">
+      <div class="day-meal"><b>Café da manhã</b>${c.n}</div>
+      <div class="day-meal"><b>Almoço</b>${a.n}</div>
+      <div class="day-meal"><b>Lanche</b>${l.n}</div>
+      <div class="day-meal"><b>Jantar</b>${j.n}</div>
+    </div>
+    <div class="day-foot">
+      <span class="workout-tag">${isRest ? '🌿 Descanso ativo' : '💪 ' + w.nome}</span>
+      <span class="tip">Dica do dia: ${dailyTips[dayNum-1]}</span>
+    </div>
+  </div>`;
+}
+
+function buildRecipeBank(bank){
+  const cats = [['cafe','Café da manhã'],['almoco','Almoço'],['lanche','Lanche'],['jantar','Jantar']];
+  let html = '<div class="recipe-grid">';
+  cats.forEach(([key,label]) => {
+    bank[key].forEach(r => {
+      html += `<div class="recipe-card">
+        <span class="meal-label">${label}</span>
+        <h4>${r.n}</h4>
+        <ul>${r.ing.map(i=>`<li>${i}</li>`).join('')}</ul>
+        <p class="prep"><b>Preparo:</b> ${r.prep}</p>
+      </div>`;
+    });
+  });
+  html += '</div>';
+  return html;
+}
+
+function buildWorkoutTable(w){
+  return `<div class="workout-name">${w.nome}</div>
+  <table class="workout-table"><thead><tr><th>Exercício</th><th>Como fazer</th><th>Séries × Tempo</th></tr></thead>
+  <tbody>${w.itens.map(([n,c,s])=>`<tr><td>${n}</td><td>${c}</td><td>${s}</td></tr>`).join('')}</tbody></table>`;
+}
+
+function buildShoppingList(list){
+  const cats = [['proteinas','Proteínas'],['vegetais','Vegetais'],['graos','Carboidratos'],['outros','Outros']];
+  let html = '<div class="shop-grid">';
+  cats.forEach(([key,label])=>{
+    if(!list[key] || (list[key].length===1 && list[key][0]==='—')) return;
+    html += `<div class="shop-col"><h4>${label}</h4><ul>${list[key].map(i=>`<li>${i}</li>`).join('')}</ul></div>`;
+  });
+  html += '</div>';
+  return html;
+}
+
+const container = document.getElementById('weeks-container');
+let dayCursor = 0;
+
+weekMeta.forEach(week => {
+  const section = document.createElement('section');
+  section.className = 'sheet';
+  let daysHtml = '';
+  for(let i=0; i<7; i++){
+    const dayNum = dayCursor + 1;
+    daysHtml += buildDayCard(dayNum, dayPlan[dayCursor], recipeBanks[week.n]);
+    dayCursor++;
+  }
+  const uniqueWorkoutKeys = [...new Set(dayPlan.slice(dayCursor-7, dayCursor).map(d=>d.workout).filter(k=>k!=='descanso'))];
+  section.innerHTML = `
+    <div class="week-banner">
+      <img src="images/${week.img}" alt="${week.titulo}">
+      <div class="week-banner-text"><div class="week-tag">${week.dias}</div><h2 class="serif">${week.titulo}</h2></div>
+    </div>
+    <p class="week-intro">${week.intro}</p>
+    ${week.ritual ? `<div class="box bordeaux">${week.ritual}</div>` : ''}
+
+    <h3 style="font-size:17px;margin:24px 0 4px;font-style:italic;font-family:'Playfair Display',serif;">Seu plano dia a dia</h3>
+    ${daysHtml}
+
+    <h3 style="font-size:17px;margin:26px 0 4px;font-style:italic;font-family:'Playfair Display',serif;">Treinos da semana — detalhado</h3>
+    ${uniqueWorkoutKeys.map(k => buildWorkoutTable(workouts[k])).join('')}
+    ${buildWorkoutTable(workouts['descanso'])}
+
+    <h3 style="font-size:17px;margin:22px 0 4px;font-style:italic;font-family:'Playfair Display',serif;">Banco de receitas da semana</h3>
+    <p style="font-size:12.5px;color:var(--ink-soft);margin-bottom:4px;">Todas as receitas usadas nos 7 dias acima, com o preparo completo.</p>
+    ${buildRecipeBank(recipeBanks[week.n])}
+
+    <h3 style="font-size:17px;margin:6px 0 4px;font-style:italic;font-family:'Playfair Display',serif;">Lista de compras da semana</h3>
+    ${buildShoppingList(shoppingLists[week.n])}
+
+    <h3 style="font-size:16px;margin-top:22px;margin-bottom:6px;">Reflexão da semana</h3>
+    <div class="journal-box">
+      <h4>Como você se sentiu essa semana? O que foi mais difícil, e o que ficou mais fácil?</h4>
+      <div class="journal-line"></div><div class="journal-line"></div><div class="journal-line"></div>
+    </div>
+  `;
+  container.appendChild(section);
+});
+
+// Ritual da véspera é anexado ao fim da última semana (Semana 3)
+const ultimaSecao = container.lastElementChild;
+const ritualDiv = document.createElement('div');
+ritualDiv.innerHTML = `
+  <h3 style="font-size:17px;margin:24px 0 10px;font-style:italic;font-family:'Playfair Display',serif;">Ritual da Véspera</h3>
+  <p class="lede">Na noite antes do casamento, esqueça balança, espelho crítico e comparação. Você fez o trabalho nas últimas 3 semanas — agora é hora de confiar nele.</p>
+  <ul class="checklist" style="margin-top:14px;">
+    <li><span class="box-icon"></span>Beba bastante água ao longo do dia (sem exagero à noite, pra dormir bem)</li>
+    <li><span class="box-icon"></span>Faça a respiração 4-7-8 antes de deitar</li>
+    <li><span class="box-icon"></span>Escreva uma carta rápida pra você mesma sobre como chegou até aqui</li>
+    <li><span class="box-icon"></span>Durma cedo — descanso é parte do resultado, não um bônus</li>
+  </ul>
+`;
+ultimaSecao.appendChild(ritualDiv);
+</script>
+</body>
+</html>

@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Desafio Shape de Noiva — 21 Dias</title>
+<meta name="description" content="Descubra em 1 minuto o plano certo pra chegar no altar se sentindo a noiva mais linda da história — mesmo com o tempo curto.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Paleta de papelaria de casamento — comprometida a um único mundo visual
+     (ivoire quente), independente do tema do sistema. Convite de casamento
+     não vira dark mode. */
+  :root{
+    --ivoire:#fbf5ec;
+    --ivoire-deep:#f0e4d3;
+    --card:#ffffff;
+    --line:#e6d8c3;
+    --bordeaux:#7a2e3b;
+    --bordeaux-deep:#5e2029;
+    --sage:#7c8b6f;
+    --sage-deep:#5f6d54;
+    --ink:#2e2320;
+    --ink-soft:#6b5850;
+    --radius:16px;
+    --shadow:0 8px 30px rgba(46,35,32,0.10);
+    --shadow-lg:0 20px 60px rgba(46,35,32,0.16);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:'Manrope',system-ui,sans-serif;
+    background:linear-gradient(180deg,var(--ivoire) 0%,var(--ivoire-deep) 100%);
+    color:var(--ink);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    font-synthesis:none; /* nunca deixa o navegador "inventar" negrito/itálico que não foi carregado — isso é o que causava letras grudadas */
+  }
+  h1,h2,h3,.serif{font-family:'Playfair Display',Georgia,serif; text-wrap:balance;}
+  .app{max-width:520px;margin:0 auto;min-height:100vh;background:var(--ivoire);box-shadow:var(--shadow-lg);position:relative;overflow:hidden;}
+  .progress-wrap{position:sticky;top:0;z-index:20;background:var(--ivoire);padding:14px 20px 10px;border-bottom:1px solid var(--line);}
+  .progress-bar{height:6px;background:var(--ivoire-deep);border-radius:99px;overflow:hidden;}
+  .progress-fill{height:100%;background:var(--bordeaux);border-radius:99px;transition:width .4s ease;}
+  .progress-label{font-size:12px;color:var(--ink-soft);margin-top:6px;letter-spacing:.03em;text-transform:uppercase;font-variant-numeric:tabular-nums;}
+  .step{display:none;padding:28px 20px 100px;animation:fadeIn .35s ease;}
+  .step.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+  @media (prefers-reduced-motion:reduce){.step{animation:none;}}
+
+  /* HOOK SCREEN */
+  .hero-img{width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:var(--radius);box-shadow:var(--shadow);}
+  .eyebrow{color:var(--bordeaux);font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;margin:20px 0 8px;}
+  h1.hook{font-size:28px;line-height:1.25;font-weight:600;font-style:italic;margin-bottom:10px;}
+  .sub{color:var(--ink-soft);font-size:15px;line-height:1.55;margin-bottom:24px;max-width:60ch;}
+  .btn{
+    display:block;width:100%;text-align:center;padding:16px 20px;border-radius:8px;
+    background:var(--bordeaux);color:#fff;font-weight:600;
+    font-size:16px;border:none;cursor:pointer;box-shadow:0 10px 24px rgba(122,46,59,0.28);
+    text-decoration:none;transition:transform .15s ease,background .15s ease;
+  }
+  .btn:hover{background:var(--bordeaux-deep);}
+  .btn:active{transform:scale(.98);}
+  .btn:focus-visible{outline:2px solid var(--sage-deep);outline-offset:2px;}
+  .btn-ghost{background:transparent;color:var(--bordeaux);box-shadow:none;border:1.5px solid var(--line);}
+  .microcopy{text-align:center;font-size:12px;color:var(--ink-soft);margin-top:12px;}
+
+  /* QUESTIONS */
+  .q-title{font-size:22px;font-weight:600;line-height:1.3;margin-bottom:22px;font-style:italic;}
+  .options{display:flex;flex-direction:column;gap:10px;}
+  .option{
+    display:flex;align-items:center;gap:12px;padding:16px 16px;border:1.5px solid var(--line);
+    border-radius:10px;background:var(--card);cursor:pointer;font-size:15px;font-weight:500;
+    transition:all .15s ease;text-align:left;color:var(--ink);
+  }
+  .option:hover{border-color:var(--bordeaux);background:var(--ivoire);}
+  .option:focus-visible{outline:2px solid var(--sage-deep);outline-offset:2px;}
+  .option.selected{border-color:var(--bordeaux);background:var(--ivoire);box-shadow:0 0 0 2px var(--bordeaux) inset;}
+  .option-dot{width:20px;height:20px;border-radius:50%;border:2px solid var(--line);flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .option.selected .option-dot{border-color:var(--bordeaux);background:var(--bordeaux);}
+  .back-link{display:inline-block;margin-top:20px;color:var(--ink-soft);font-size:13px;cursor:pointer;text-decoration:underline;}
+
+  /* CAPTURE */
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:13px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;}
+  .field input{
+    width:100%;padding:14px 16px;border:1.5px solid var(--line);border-radius:8px;
+    font-size:15px;font-family:inherit;background:var(--card);color:var(--ink);
+  }
+  .field input:focus{outline:none;border-color:var(--bordeaux);}
+  .privacy-note{font-size:12px;color:var(--ink-soft);text-align:center;margin-top:10px;}
+
+  /* RESULT */
+  .badge{display:inline-block;background:var(--sage);color:#fff;font-size:12px;font-weight:700;
+    padding:6px 14px;border-radius:99px;letter-spacing:.03em;text-transform:uppercase;margin-bottom:14px;}
+  .result-headline{font-size:24px;font-weight:600;font-style:italic;line-height:1.3;margin-bottom:12px;}
+  .result-body{font-size:15px;line-height:1.65;color:var(--ink-soft);margin-bottom:18px;max-width:60ch;}
+  .result-body strong{color:var(--ink);}
+  .result-img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:var(--radius);box-shadow:var(--shadow);margin:16px 0;}
+  .tip-box{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--sage);
+    border-radius:8px;padding:16px;margin-bottom:20px;font-size:14px;line-height:1.6;}
+  .tip-box b{color:var(--bordeaux);}
+  .offer-card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);
+    padding:22px;box-shadow:var(--shadow);margin-bottom:16px;}
+  .offer-card h3{font-size:19px;font-weight:600;margin-bottom:6px;font-style:italic;}
+  .price-row{display:flex;align-items:baseline;gap:10px;margin:14px 0;}
+  .price-old{color:var(--ink-soft);text-decoration:line-through;font-size:15px;}
+  .price-new{font-size:32px;font-weight:700;color:var(--bordeaux);font-family:'Playfair Display',serif;font-variant-numeric:tabular-nums;}
+  .price-note{font-size:12px;color:var(--ink-soft);margin-bottom:16px;}
+  .includes{list-style:none;margin:14px 0;}
+  .includes li{padding:8px 0;font-size:14px;display:flex;gap:8px;align-items:flex-start;}
+  .includes li::before{content:"✓";color:var(--sage-deep);font-weight:700;flex-shrink:0;}
+  .food-strip{display:flex;gap:10px;margin:16px 0;}
+  .food-strip img{width:50%;aspect-ratio:1/1;object-fit:cover;border-radius:8px;}
+
+  /* LOADING */
+  .loading-wrap{position:relative;width:140px;height:140px;margin:100px auto 26px;}
+  .loading-ring{width:100%;height:100%;transform:rotate(-90deg);}
+  .ring-bg{fill:none;stroke:var(--line);stroke-width:8;}
+  .ring-fill{fill:none;stroke:var(--bordeaux);stroke-width:8;stroke-linecap:round;
+    stroke-dasharray:326.7;stroke-dashoffset:326.7;transition:stroke-dashoffset .25s ease;}
+  .loading-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:28px;color:var(--bordeaux);
+    font-variant-numeric:tabular-nums;}
+  .loading-label{text-align:center;font-size:14px;color:var(--ink-soft);font-style:italic;
+    transition:opacity .2s ease;padding:0 30px;}
+
+  /* JORNADA */
+  .journey{margin:24px 0 8px;}
+  .journey-label{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);
+    text-align:center;margin-bottom:20px;font-weight:700;}
+  .journey-track{position:relative;display:flex;justify-content:space-between;padding:0 2px;}
+  .journey-line{position:absolute;top:7px;left:16px;right:16px;height:3px;
+    background:linear-gradient(90deg,var(--bordeaux),var(--sage));border-radius:99px;z-index:0;}
+  .journey-node{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;flex:1;text-align:center;}
+  .node-dot{width:16px;height:16px;border-radius:50%;background:var(--card);border:3px solid var(--bordeaux);margin-bottom:8px;}
+  .journey-node.end .node-dot{border-color:var(--sage-deep);background:var(--sage-deep);}
+  .journey-node.here .node-dot{background:var(--bordeaux);box-shadow:0 0 0 5px rgba(122,46,59,0.15);}
+  .node-tag{position:absolute;top:-22px;background:var(--bordeaux);color:#fff;font-size:8.5px;font-weight:700;
+    padding:2px 7px;border-radius:99px;white-space:nowrap;}
+  .node-title{font-size:10.5px;color:var(--ink);line-height:1.3;font-weight:600;}
+  .node-title small{color:var(--ink-soft);font-size:9px;font-weight:500;}
+
+  @media (min-width:540px){
+    .app{margin:24px auto;min-height:auto;border-radius:24px;}
+    h1.hook{font-size:32px;}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="progress-wrap" id="progressWrap" style="display:none;">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%;"></div></div>
+    <div class="progress-label" id="progressLabel">Pergunta 1 de 9</div>
+  </div>
+
+  <!-- STEP 0: HOOK -->
+  <div class="step active" id="step-hook">
+    <div style="padding:20px 20px 0;">
+      <img class="hero-img" src="images/hero-noiva-espelho.jpg" alt="Noiva se olhando no espelho, sorrindo">
+      <div class="eyebrow">Desafio Shape de Noiva</div>
+      <h1 class="hook serif">Faltam quantas semanas pro seu grande dia?</h1>
+      <p class="sub">Responda 9 perguntas rápidas e descubra o plano certo pra chegar no altar se sentindo a noiva mais linda da história — mesmo que o tempo esteja curto.</p>
+      <button class="btn" onclick="goToStep(1)">Começar o quiz →</button>
+      <p class="microcopy">Leva menos de 1 minuto. Sem cadastro por enquanto.</p>
+    </div>
+  </div>
+
+  <!-- STEPS 1-9: QUESTIONS injected by JS -->
+  <div id="questions-container"></div>
+
+  <!-- STEP 10: CAPTURE -->
+  <div class="step" id="step-capture">
+    <h2 class="serif" style="font-size:22px;margin-bottom:8px;">Seu plano personalizado está pronto</h2>
+    <p class="sub" style="margin-bottom:20px;">Pra onde enviamos?</p>
+    <div class="field">
+      <label for="inputNome">Seu primeiro nome</label>
+      <input type="text" id="inputNome" placeholder="Ex: Marina">
+    </div>
+    <div class="field">
+      <label for="inputEmail">Seu melhor e-mail</label>
+      <input type="email" id="inputEmail" placeholder="voce@email.com">
+    </div>
+    <div class="field">
+      <label for="inputWhats">WhatsApp (opcional, mas recomendado)</label>
+      <input type="tel" id="inputWhats" placeholder="(11) 99999-9999">
+    </div>
+    <button class="btn" onclick="submitCapture()">Ver meu resultado →</button>
+    <p class="privacy-note">Seus dados são usados só pra te enviar o resultado. Sem spam.</p>
+  </div>
+
+  <!-- STEP 10.5: LOADING (transição entre captura e resultado) -->
+  <div class="step" id="step-loading">
+    <div class="loading-wrap">
+      <svg class="loading-ring" viewBox="0 0 120 120">
+        <circle class="ring-bg" cx="60" cy="60" r="52"></circle>
+        <circle class="ring-fill" id="ringFill" cx="60" cy="60" r="52"></circle>
+      </svg>
+      <div class="loading-pct" id="loadingPct">0%</div>
+    </div>
+    <p class="loading-label" id="loadingLabel">Analisando suas respostas...</p>
+  </div>
+
+  <!-- STEP 11: RESULT (content injected by JS) -->
+  <div class="step" id="step-result"></div>
+
+</div>
+
+<script>
+/* =========================================================
+   DESAFIO SHAPE DE NOIVA — Quiz Funnel
+   Vanilla JS, sem dependências externas (padrão frontend-dev:
+   JS mínimo, HTML semântico, mobile-first).
+   ========================================================= */
+
+const questions = [
+  {
+    id: 'q1',
+    title: 'Quantas semanas faltam para o seu casamento?',
+    options: [
+      { v: 'A', t: 'Menos de 4 semanas' },
+      { v: 'B', t: 'Entre 4 e 8 semanas' },
+      { v: 'C', t: 'Entre 2 e 3 meses' },
+      { v: 'C', t: 'Mais de 3 meses' },
+      { v: 'D', t: 'Ainda não tenho data marcada' },
+    ]
+  },
+  {
+    id: 'q2',
+    title: 'O que mais te incomoda quando você se imagina de vestido?',
+    options: [
+      { v: 'inchaço', t: 'Inchaço / sensação de corpo "empapuçado"' },
+      { v: 'gordura localizada', t: 'Gordura localizada (barriga, braços, costas)' },
+      { v: 'falta de definição', t: 'Falta de definição no geral' },
+      { v: 'não se reconhecer em fotos', t: 'Simplesmente não me reconheço em fotos' },
+    ]
+  },
+  {
+    id: 'q3',
+    title: 'Você já tentou emagrecer para o casamento antes?',
+    options: [
+      { v: 'varias', t: 'Sim, várias vezes, e nada funcionou' },
+      { v: 'uma', t: 'Sim, uma vez, mas não me comprometi de verdade' },
+      { v: 'primeira', t: 'Não, essa é minha primeira tentativa séria' },
+      { v: 'tentando', t: 'Estou tentando agora, mas sem resultado' },
+    ]
+  },
+  {
+    id: 'q4',
+    title: 'Com os preparativos do casamento, você sente que está...',
+    options: [
+      { v: 'comendo por ansiedade', t: 'Comendo mais por ansiedade' },
+      { v: 'sem tempo', t: 'Sem tempo pra pensar em dieta' },
+      { v: 'enrolando', t: 'Enrolando, sei que preciso começar' },
+      { v: 'no controle', t: 'No controle, só preciso de um empurrão final' },
+    ]
+  },
+  {
+    id: 'q5',
+    title: 'Quanto tempo por dia você consegue dedicar a isso?',
+    options: [
+      { v: '<15', t: 'Menos de 15 minutos' },
+      { v: '15-30', t: 'Entre 15 e 30 minutos' },
+      { v: '>30', t: 'Mais de 30 minutos' },
+      { v: 'caotica', t: 'Não sei, minha rotina é caótica' },
+    ]
+  },
+  {
+    id: 'q6',
+    title: 'Você prefere treinar...',
+    options: [
+      { v: 'casa', t: 'Em casa, sem nenhum equipamento' },
+      { v: 'halteres', t: 'Com halteres/elásticos que já tenho' },
+      { v: 'so-alimentacao', t: 'Prefiro focar só na alimentação' },
+      { v: 'tanto-faz', t: 'Tanto faz, só quero resultado' },
+    ]
+  },
+  {
+    id: 'q7',
+    title: 'O que você já tentou que NÃO funcionou?',
+    options: [
+      { v: 'dieta restritiva', t: 'Dietas restritivas malucas' },
+      { v: 'chá detox', t: 'Chás e detox milagrosos' },
+      { v: 'academia sem orientação', t: 'Academia sem orientação nenhuma' },
+      { v: 'nada estruturado', t: 'Nunca tentei nada estruturado' },
+    ]
+  },
+  {
+    id: 'q8',
+    title: 'Se nada mudar até o casamento, como você imagina se sentir nas fotos?',
+    options: [
+      { v: 'pessima', t: 'Péssima, vou evitar aparecer' },
+      { v: 'incomodada', t: 'Incomodada, mas vou fingir que está tudo bem' },
+      { v: 'ansiosa', t: 'Ansiosa só de pensar nisso' },
+      { v: 'nem-imaginar', t: 'Prefiro nem imaginar' },
+    ]
+  },
+  {
+    id: 'q9',
+    title: 'E se em 21 dias você sentisse o vestido mais solto e outra confiança no espelho?',
+    options: [
+      { v: 'exatamente', t: 'Seria exatamente o que eu preciso agora' },
+      { v: 'nao-acredito', t: 'Eu quase não acredito que é possível' },
+      { v: 'alivio', t: 'Seria o alívio que eu tô esperando' },
+      { v: 'bora', t: 'Bora, me mostra como' },
+    ]
+  },
+];
+
+const answers = {};
+let currentQuestion = 0;
+
+// Build question steps dynamically
+const container = document.getElementById('questions-container');
+questions.forEach((q, idx) => {
+  const div = document.createElement('div');
+  div.className = 'step';
+  div.id = 'step-q' + idx;
+  div.innerHTML = `
+    <div style="padding:8px 20px;">
+      <h2 class="q-title serif">${q.title}</h2>
+      <div class="options" data-qid="${q.id}">
+        ${q.options.map((o, oi) => `
+          <button class="option" data-value="${o.v}" onclick="selectOption(${idx}, ${oi}, this)">
+            <span class="option-dot"></span>
+            <span>${o.t}</span>
+          </button>
+        `).join('')}
+      </div>
+      ${idx > 0 ? `<span class="back-link" onclick="goToStep(${idx})">← voltar</span>` : ''}
+    </div>
+  `;
+  container.appendChild(div);
+});
+
+function goToStep(stepIndex) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  if (stepIndex === 0) {
+    document.getElementById('step-hook').classList.add('active');
+    document.getElementById('progressWrap').style.display = 'none';
+  } else if (stepIndex >= 1 && stepIndex <= questions.length) {
+    document.getElementById('step-q' + (stepIndex - 1)).classList.add('active');
+    document.getElementById('progressWrap').style.display = 'block';
+    updateProgress(stepIndex);
+  } else if (stepIndex === questions.length + 1) {
+    document.getElementById('step-capture').classList.add('active');
+    updateProgress(questions.length + 1);
+  }
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function updateProgress(stepIndex) {
+  const total = questions.length + 1; // +1 for capture
+  const pct = Math.min(100, Math.round((stepIndex / total) * 100));
+  document.getElementById('progressFill').style.width = pct + '%';
+  const label = stepIndex <= questions.length
+    ? `Pergunta ${stepIndex} de ${questions.length}`
+    : `Quase lá...`;
+  document.getElementById('progressLabel').textContent = label;
+}
+
+function selectOption(qIdx, optIdx, el) {
+  const q = questions[qIdx];
+  const opt = q.options[optIdx];
+  answers[q.id] = opt.v;
+
+  // visual feedback
+  el.parentElement.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+
+  // auto-advance after short delay
+  setTimeout(() => {
+    if (qIdx + 1 < questions.length) {
+      goToStep(qIdx + 2); // next question
+    } else {
+      goToStep(questions.length + 1); // capture page
+    }
+  }, 280);
+}
+
+function submitCapture() {
+  const nome = document.getElementById('inputNome').value.trim();
+  const email = document.getElementById('inputEmail').value.trim();
+  const whats = document.getElementById('inputWhats').value.trim();
+
+  if (!nome || !email || !email.includes('@')) {
+    alert('Preenche seu nome e um e-mail válido pra gente liberar seu resultado 💌');
+    return;
+  }
+
+  answers.nome = nome;
+  answers.email = email;
+  answers.whats = whats;
+
+  /* ==========================================================
+     TODO (integração real): aqui é onde você envia `answers`
+     pro seu provedor de e-mail marketing / CRM (ex: webhook
+     pra ActiveCampaign, Mailchimp, RD Station, ou direto pro
+     Hotmart/Kiwify se estiver usando captura própria).
+     Exemplo:
+     fetch('https://SEU-ENDPOINT/leads', {
+       method: 'POST',
+       headers: {'Content-Type':'application/json'},
+       body: JSON.stringify(answers)
+     });
+     ========================================================== */
+
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step-loading').classList.add('active');
+  document.getElementById('progressWrap').style.display = 'none';
+  window.scrollTo({top:0, behavior:'smooth'});
+  startLoadingSequence();
+}
+
+function startLoadingSequence() {
+  const messages = [
+    'Analisando suas respostas...',
+    'Calculando o tempo até o seu grande dia...',
+    'Montando seu plano de 21 dias...',
+    'Personalizando sua jornada...',
+  ];
+  const circumference = 2 * Math.PI * 52; // ~326.7
+  const ringFill = document.getElementById('ringFill');
+  const pctLabel = document.getElementById('loadingPct');
+  const msgLabel = document.getElementById('loadingLabel');
+  ringFill.style.strokeDasharray = circumference;
+  ringFill.style.strokeDashoffset = circumference;
+  msgLabel.textContent = messages[0];
+  msgLabel.style.opacity = 1;
+
+  const totalDuration = 2400; // ms — rápido o suficiente pra não cansar, longo o suficiente pra parecer processamento real
+  const stepTime = 60;
+  const totalSteps = totalDuration / stepTime;
+  let step = 0;
+  let msgIndex = 0;
+
+  const interval = setInterval(() => {
+    step++;
+    const pct = Math.min(100, Math.round((step / totalSteps) * 100));
+    ringFill.style.strokeDashoffset = circumference - (pct / 100) * circumference;
+    pctLabel.textContent = pct + '%';
+
+    const newMsgIndex = Math.min(messages.length - 1, Math.floor((pct / 100) * messages.length));
+    if (newMsgIndex !== msgIndex) {
+      msgIndex = newMsgIndex;
+      msgLabel.style.opacity = 0;
+      setTimeout(() => { msgLabel.textContent = messages[msgIndex]; msgLabel.style.opacity = 1; }, 150);
+    }
+
+    if (step >= totalSteps) {
+      clearInterval(interval);
+      setTimeout(() => {
+        renderResult();
+        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+        document.getElementById('step-result').classList.add('active');
+        window.scrollTo({top:0, behavior:'smooth'});
+      }, 350);
+    }
+  }, stepTime);
+}
+
+const painWords = {
+  'inchaço': 'o inchaço',
+  'gordura localizada': 'a gordura localizada',
+  'falta de definição': 'a falta de definição',
+  'não se reconhecer em fotos': 'não se reconhecer nas fotos',
+};
+
+const profiles = {
+  A: {
+    badge: 'Correndo Contra o Tempo',
+    headline: (n) => `${n}, ainda dá tempo — mas cada dia importa agora.`,
+    body: (dor) => `Você não tem tempo pra dieta lenta nem treino de 1h. Por isso o Desafio Shape de Noiva foi desenhado pra <strong>21 dias</strong> — a Semana 1 já ataca <strong>${dor}</strong> pra você ver diferença rápido, quando mais precisa ver.`,
+    cta: 'Quero começar hoje mesmo',
+    img: 'resultado-noiva-floresta.jpg',
+  },
+  B: {
+    badge: 'Pronta Pra Virar o Jogo',
+    headline: (n) => `${n}, seu tempo é suficiente pra uma virada real — se começar agora.`,
+    body: (dor) => `Sabemos que talvez você já tenha tentado antes e não tenha seguido até o fim. O Desafio funciona porque são só <strong>21 dias</strong>, não um compromisso pra vida toda. É curto o bastante pra você terminar — e focado em ${dor} desde a Semana 1.`,
+    cta: 'Garantir meu Desafio agora',
+    img: 'resultado-noiva-floresta.jpg',
+  },
+  C: {
+    badge: 'Com Tempo de Sobra Pra Fazer Direito',
+    headline: (n) => `${n}, você tem o tempo raro que toda noiva queria ter.`,
+    body: (dor) => `Começar 21 dias de cada vez, do jeito certo, é como as noivas que chegam tranquilas no altar se preparam — sem sofrimento de última hora. E já ataca ${dor} desde a primeira semana.`,
+    cta: 'Começar minha primeira fase',
+    img: 'resultado-noiva-floresta.jpg',
+  },
+  D: {
+    badge: 'Construindo Desde Já',
+    headline: (n) => `${n}, não importa quando for o grande dia — o corpo que você quer começa a se construir agora.`,
+    body: (dor) => `Quando a data chegar, você já vai estar pronta — em vez de correndo atrás. Comece tratando ${dor} enquanto tem todo o tempo do mundo a seu favor.`,
+    cta: 'Quero começar antes de todo mundo',
+    img: 'resultado-noiva-floresta.jpg',
+  },
+};
+
+function renderResult() {
+  const profileKey = answers.q1 || 'B';
+  const profile = profiles[profileKey];
+  const dor = painWords[answers.q2] || 'o que mais te incomoda hoje';
+  const nome = answers.nome || 'Você';
+
+  const html = `
+    <div style="padding:8px 20px;">
+      <span class="badge">${profile.badge}</span>
+      <h2 class="result-headline serif">${profile.headline(nome)}</h2>
+      <p class="result-body">${profile.body(dor)}</p>
+
+      <div class="journey">
+        <div class="journey-label">Sua jornada nos próximos 21 dias</div>
+        <div class="journey-track">
+          <div class="journey-line"></div>
+          <div class="journey-node here">
+            <span class="node-tag">Você está aqui</span>
+            <span class="node-dot"></span>
+            <span class="node-title">Hoje</span>
+          </div>
+          <div class="journey-node">
+            <span class="node-dot"></span>
+            <span class="node-title">Semana 1<br><small>Anti-inchaço</small></span>
+          </div>
+          <div class="journey-node">
+            <span class="node-dot"></span>
+            <span class="node-title">Semana 2<br><small>Intensifica</small></span>
+          </div>
+          <div class="journey-node end">
+            <span class="node-dot"></span>
+            <span class="node-title">Grande Dia<br><small>Pronta pro altar</small></span>
+          </div>
+        </div>
+      </div>
+
+      <img class="result-img" src="images/${profile.img}" alt="Noiva confiante, resultado do desafio">
+
+      <div class="tip-box">
+        <b>Dica pra hoje, de graça:</b> beba 500ml de água morna com limão assim que acordar — é o primeiro passo pra reduzir o inchaço, e é exatamente com isso que a Semana 1 do Desafio começa.
+      </div>
+
+      <!-- AQUI ENTRA A VSL (fica com o usuário) — logo depois da jornada/dica,
+           antes da oferta, terminando com quebra de objeções antes do CTA -->
+
+      <div class="offer-card">
+        <h3 class="serif">Desafio Shape de Noiva — 21 Dias</h3>
+        <div class="food-strip">
+          <img src="images/comida-saudavel.jpg" alt="Cardápio saudável do desafio">
+          <img src="images/treino-alongamento.jpg" alt="Treino sem academia do desafio">
+        </div>
+        <ul class="includes">
+          <li>Cardápio e receitas dia a dia (semanas 1, 2 e 3)</li>
+          <li>Treinos sem academia, 15-20min/dia</li>
+          <li>Checklist diário de desafio</li>
+          <li>Bônus: Kit Anti-Ansiedade Pré-Casamento</li>
+        </ul>
+        <div class="price-row">
+          <span class="price-new">R$ 47,90</span>
+        </div>
+        <p class="price-note">Pagamento único. Acesso imediato após a confirmação.</p>
+        <a class="btn" href="#" onclick="alert('Aqui entra o link real de checkout (Hotmart/Kiwify).'); return false;">${profile.cta} →</a>
+      </div>
+
+      <p class="microcopy">Resultados individuais podem variar. Este produto não substitui acompanhamento médico ou nutricional — consulte um profissional de saúde antes de iniciar qualquer programa.</p>
+    </div>
+  `;
+  document.getElementById('step-result').innerHTML = html;
+}
+</script>
+</body>
+</html>

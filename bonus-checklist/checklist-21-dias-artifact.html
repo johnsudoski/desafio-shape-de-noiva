@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checklist 21 Dias — Shape de Noiva</title>
+<meta name="description" content="Checklist interativo do Desafio Shape de Noiva: marque água, treino e cardápio dia a dia — seu progresso fica salvo neste navegador.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,500;1,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ivoire:#fbf5ec; --ivoire-deep:#f0e4d3; --card:#ffffff; --line:#e6d8c3;
+    --bordeaux:#7a2e3b; --bordeaux-deep:#5e2029; --sage:#7c8b6f; --sage-deep:#5f6d54; --sage-pale:#eef1ea;
+    --ink:#2e2320; --ink-soft:#6b5850; --radius:14px; --shadow:0 8px 30px rgba(46,35,32,0.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Manrope',system-ui,sans-serif;background:var(--ivoire-deep);color:var(--ink);font-synthesis:none;-webkit-font-smoothing:antialiased;}
+  .page{max-width:860px;margin:0 auto;padding:44px 40px 80px;background:var(--ivoire);min-height:100vh;}
+  .serif{font-family:'Playfair Display',Georgia,serif;text-wrap:balance;}
+  .eyebrow{color:var(--bordeaux);font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;}
+  h1{font-size:30px;font-style:italic;font-weight:600;margin-bottom:6px;}
+  .sub{color:var(--ink-soft);font-size:14px;margin-bottom:20px;max-width:60ch;}
+
+  .progress-wrap{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:26px;
+    display:flex;align-items:center;gap:16px;}
+  .progress-track{flex:1;height:10px;background:var(--ivoire-deep);border-radius:99px;overflow:hidden;}
+  .progress-fill{height:100%;background:var(--bordeaux);border-radius:99px;transition:width .35s ease;width:0%;}
+  .progress-num{font-family:'Playfair Display',serif;font-style:italic;font-weight:700;color:var(--bordeaux);font-size:18px;
+    font-variant-numeric:tabular-nums;white-space:nowrap;}
+
+  .legend{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px;padding:12px 16px;background:var(--sage-pale);border-radius:10px;font-size:12.5px;color:var(--sage-deep);}
+  .legend span{display:flex;align-items:center;gap:6px;font-weight:600;}
+
+  .print-note{display:flex;gap:16px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;margin-bottom:22px;}
+  .print-note img{width:76px;height:76px;flex-shrink:0;border-radius:8px;border:1px solid var(--line);padding:4px;background:#fff;}
+  .print-note h4{font-size:13.5px;color:var(--bordeaux);margin-bottom:4px;}
+  .print-note p{font-size:12px;color:var(--ink-soft);line-height:1.5;}
+  .print-note .qr-link{font-size:11px;color:var(--bordeaux-deep);font-weight:600;word-break:break-all;margin-top:4px;}
+  @media (max-width:640px){ .print-note{flex-direction:column;text-align:center;} }
+
+  .week{margin-bottom:30px;}
+  .week-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+  .week-header .dot{width:10px;height:10px;border-radius:50%;background:var(--bordeaux);flex-shrink:0;}
+  .week-header h2{font-size:18px;font-style:italic;font-family:'Playfair Display',serif;font-weight:600;}
+  .week-header span.range{font-size:12px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em;}
+
+  .days-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;}
+  .day-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 8px;text-align:center;transition:border-color .2s ease,background .2s ease;}
+  .day-card.complete{border-color:var(--sage-deep);background:var(--sage-pale);}
+  .day-num{font-family:'Playfair Display',serif;font-style:italic;font-weight:600;font-size:17px;color:var(--bordeaux);font-variant-numeric:tabular-nums;}
+  .day-checks{display:flex;flex-direction:column;gap:7px;margin-top:8px;align-items:center;}
+  .chk-item{display:flex;align-items:center;justify-content:center;cursor:pointer;}
+  .chk-item input{position:absolute;opacity:0;width:16px;height:16px;cursor:pointer;}
+  .chk-box{width:16px;height:16px;border:1.5px solid var(--sage-deep);border-radius:4px;display:flex;align-items:center;justify-content:center;
+    background:var(--card);transition:background .15s ease,border-color .15s ease;}
+  .chk-item input:checked + .chk-box{background:var(--sage-deep);border-color:var(--sage-deep);}
+  .chk-item input:checked + .chk-box::after{content:"✓";color:#fff;font-size:11px;font-weight:700;}
+  .chk-item input:focus-visible + .chk-box{outline:2px solid var(--bordeaux);outline-offset:2px;}
+
+  .reset-row{text-align:center;margin-top:36px;}
+  .reset-btn{background:transparent;border:1.5px solid var(--line);color:var(--ink-soft);font-size:12.5px;
+    padding:10px 18px;border-radius:99px;cursor:pointer;font-family:inherit;}
+  .reset-btn:hover{border-color:var(--bordeaux);color:var(--bordeaux);}
+
+  .signature{margin-top:30px;padding-top:22px;border-top:1px dotted var(--line);text-align:center;}
+  .signature p{font-size:13px;color:var(--ink-soft);}
+  .signature .serif{font-size:16px;color:var(--bordeaux);margin-top:6px;}
+
+  @media (max-width:640px){ .days-grid{grid-template-columns:repeat(4,1fr);} .page{padding:28px 18px 60px;} }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="eyebrow">Bônus — Checklist Interativo</div>
+  <h1 class="serif">Checklist 21 Dias</h1>
+  <p class="sub">Marque os 3 itens todo dia: água morna com limão, treino do dia e cardápio seguido. Seu progresso fica salvo automaticamente neste navegador — pode fechar e voltar quando quiser.</p>
+
+  <div class="print-note">
+    <img src="data:image/png;base64,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" alt="QR code desta página">
+    <div>
+      <h4>Imprimiu esta página?</h4>
+      <p>No papel, marque com caneta. Se preferir marcar do celular com progresso salvo automático, escaneie o código ou acesse:</p>
+      <p class="qr-link">claude.ai/code/artifact/16c33357-d22d-4d8d-a074-f35ca4ae650e</p>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <span class="progress-num" id="progressNum">0/63</span>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <div class="legend">
+    <span>💧 Água morna + limão</span>
+    <span>💪 Treino do dia</span>
+    <span>🍽️ Cardápio seguido</span>
+  </div>
+
+  <div class="week">
+    <div class="week-header"><span class="dot"></span><h2>Semana 1 — Choque Anti-Inchaço</h2><span class="range">Dias 1–7</span></div>
+    <div class="days-grid" id="week1"></div>
+  </div>
+  <div class="week">
+    <div class="week-header"><span class="dot" style="background:var(--sage-deep);"></span><h2>Semana 2 — Intensifica</h2><span class="range">Dias 8–14</span></div>
+    <div class="days-grid" id="week2"></div>
+  </div>
+  <div class="week">
+    <div class="week-header"><span class="dot" style="background:var(--ink-soft);"></span><h2>Semana 3 — Reta Final</h2><span class="range">Dias 15–21</span></div>
+    <div class="days-grid" id="week3"></div>
+  </div>
+
+  <div class="reset-row">
+    <button class="reset-btn" id="resetBtn">Reiniciar checklist</button>
+  </div>
+
+  <div class="signature">
+    <p>Faltam poucos dias pro seu grande dia. Cada quadradinho marcado é um passo mais perto de se sentir exatamente como você imaginou.</p>
+    <p class="serif">Desafio Shape de Noiva</p>
+  </div>
+</div>
+
+<script>
+/* Checklist interativo com persistência local (localStorage).
+   Cada viewer tem seu próprio progresso salvo neste navegador —
+   não é compartilhado entre dispositivos, só lembra pra ela mesma. */
+
+const STORAGE_KEY = 'desafio-shape-noiva-checklist-v1';
+const TOTAL_DAYS = 21;
+const ITEMS_PER_DAY = 3; // água, treino, cardápio
+const TOTAL_CHECKS = TOTAL_DAYS * ITEMS_PER_DAY;
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  }catch(e){
+    return {};
+  }
+}
+function saveState(state){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){ /* modo privado ou bloqueado — segue sem salvar */ }
+}
+
+let state = loadState();
+
+function keyFor(day, item){ return day + '-' + item; }
+
+function buildWeek(elId, start, end){
+  const el = document.getElementById(elId);
+  for(let d = start; d <= end; d++){
+    const card = document.createElement('div');
+    card.className = 'day-card';
+    card.id = 'day-' + d;
+    const items = ['agua','treino','cardapio'];
+    const iconMap = {agua:'💧', treino:'💪', cardapio:'🍽️'};
+    card.innerHTML = `
+      <div class="day-num">${d}</div>
+      <div class="day-checks">
+        ${items.map(it => `
+          <label class="chk-item" title="${iconMap[it]}">
+            <input type="checkbox" data-day="${d}" data-item="${it}">
+            <span class="chk-box"></span>
+          </label>
+        `).join('')}
+      </div>
+    `;
+    el.appendChild(card);
+  }
+}
+buildWeek('week1', 1, 7);
+buildWeek('week2', 8, 14);
+buildWeek('week3', 15, 21);
+
+function applyState(){
+  document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    const k = keyFor(cb.dataset.day, cb.dataset.item);
+    cb.checked = !!state[k];
+  });
+  updateDayCardStyles();
+  updateProgress();
+}
+
+function updateDayCardStyles(){
+  for(let d = 1; d <= TOTAL_DAYS; d++){
+    const items = ['agua','treino','cardapio'];
+    const allChecked = items.every(it => state[keyFor(d, it)]);
+    const card = document.getElementById('day-' + d);
+    if(card) card.classList.toggle('complete', allChecked);
+  }
+}
+
+function updateProgress(){
+  const checkedCount = Object.values(state).filter(Boolean).length;
+  document.getElementById('progressNum').textContent = `${checkedCount}/${TOTAL_CHECKS}`;
+  document.getElementById('progressFill').style.width = Math.round((checkedCount / TOTAL_CHECKS) * 100) + '%';
+}
+
+document.addEventListener('change', (e) => {
+  if(e.target.matches('input[type="checkbox"]')){
+    const k = keyFor(e.target.dataset.day, e.target.dataset.item);
+    state[k] = e.target.checked;
+    saveState(state);
+    updateDayCardStyles();
+    updateProgress();
+  }
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  if(confirm('Reiniciar o checklist inteiro? Isso apaga todo o progresso marcado.')){
+    state = {};
+    saveState(state);
+    applyState();
+  }
+});
+
+applyState();
+</script>
+</body>
+</html>
