@@ -24,6 +24,7 @@ Pesquisa de mercado (squad Spy, `*market`) identificou esse subnicho como oceano
 - [ ] Claude cola a URL em `LEAD_WEBHOOK_URL` (topo do `<script>` em `site/index.html`) — já preparado, só falta a URL
 - [ ] Rotina manual: usuário confere leads no painel do Formspree, envia os 3 e-mails (`emails/`) na mão pra quem não comprou
 - [ ] Quando o volume crescer: migrar pra automação n8n (`automations/`, README já pronto) ou ferramenta de e-mail marketing com automação visual (Brevo)
+- [x] Capa do produto (`mockups/capa-produto.png`, 1080×1350) — pronta pra subir no Hotmart/Kiwify
 - [ ] Configurar checkout real (Hotmart/Kiwify) e plugar o link no CTA e nos 3 e-mails
 - [ ] VSL em andamento pelo usuário — entra entre `.tip-box` e `.offer-card` no resultado do quiz (marcado no código)
 - [ ] Gamma não conectou nesta sessão (timeout) — se o usuário quiser tentar usá-lo depois, reconectar via `/mcp`
