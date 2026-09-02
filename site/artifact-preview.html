@@ -218,9 +218,11 @@ const imageAssets = {
    JS mínimo, HTML semântico, mobile-first).
    ========================================================= */
 
-// TODO: troque pela URL do webhook do n8n (node "Webhook - Novo Lead" em
-// automations/n8n-lead-nurture.json, depois de importar e ativar o workflow).
-const LEAD_WEBHOOK_URL = 'COLE_AQUI_A_URL_DO_WEBHOOK_N8N';
+// Formulário Formspree do Desafio Shape de Noiva — cada lead do quiz
+// chega por e-mail e fica salvo no painel de formspree.io/forms.
+// (Se no futuro migrar pra automação via n8n, os workflows prontos estão
+// em automations/ — essa mesma URL é só trocar por lá.)
+const LEAD_WEBHOOK_URL = 'https://formspree.io/f/mgaeyyav';
 
 const questions = [
   {
@@ -401,13 +403,12 @@ function submitCapture() {
   answers.email = email;
   answers.whats = whats;
 
-  // Envia o lead pro n8n (workflow: automations/n8n-lead-nurture.json).
-  // Troque LEAD_WEBHOOK_URL (definida no topo do script) pela URL real
-  // do node "Webhook - Novo Lead" depois de importar e ativar o workflow.
+  // Envia o lead pro Formspree — cada envio chega por e-mail pra você
+  // e fica salvo no painel do formspree.io. Simples, sem servidor próprio.
   if (LEAD_WEBHOOK_URL && !LEAD_WEBHOOK_URL.includes('COLE_AQUI')) {
     fetch(LEAD_WEBHOOK_URL, {
       method: 'POST',
-      headers: {'Content-Type':'application/json'},
+      headers: {'Content-Type':'application/json', 'Accept':'application/json'},
       body: JSON.stringify(answers),
     }).catch(() => { /* falha de rede não deve travar a experiência da usuária */ });
   }

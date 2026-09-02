@@ -16,13 +16,16 @@ Pesquisa de mercado (squad Spy, `*market`) identificou esse subnicho como oceano
 
 **PDFs prontos pra subir no checkout:** `entrega-checkout/Desafio-Shape-de-Noiva-Ebook.pdf` (~2MB) e `entrega-checkout/Checklist-21-Dias.pdf` — ambos gerados via Edge headless. Cada um traz um QR code + link levando pra versão web interativa (checklist com checkbox real e progresso salvo), então a cliente tem as duas experiências: papel pra imprimir, link pra usar no celular.
 
+**Decisão (2026-09-02):** automação via n8n adiada — complexa demais pro estágio atual (poucos leads). Os 2 workflows continuam salvos em `automations/` pra quando o volume justificar migrar. Por ora, captura de lead via **Formspree** (grátis, sem servidor) + reenvio manual dos 3 e-mails pra quem não comprou.
+
 **Próxima Etapa Focada:**
-- [ ] Rodar `git subtree push --prefix=nexus/desafio-shape-noiva desafio-shape-noiva main` (bloqueado pro Claude pelo classificador de segurança — comando pronto, só falta o usuário rodar)
-- [ ] Importar os 2 workflows n8n (`automations/`), configurar credenciais e ativar
-- [ ] Colar a URL real do webhook em `LEAD_WEBHOOK_URL` (topo do `<script>` em `site/index.html`)
-- [ ] Configurar postback do Hotmart/Kiwify apontando pro segundo workflow
+- [x] Push pro GitHub feito pelo usuário — https://github.com/johnsudoski/desafio-shape-de-noiva
+- [ ] Usuário cria conta grátis no Formspree e traz a URL do formulário
+- [ ] Claude cola a URL em `LEAD_WEBHOOK_URL` (topo do `<script>` em `site/index.html`) — já preparado, só falta a URL
+- [ ] Rotina manual: usuário confere leads no painel do Formspree, envia os 3 e-mails (`emails/`) na mão pra quem não comprou
+- [ ] Quando o volume crescer: migrar pra automação n8n (`automations/`, README já pronto) ou ferramenta de e-mail marketing com automação visual (Brevo)
 - [ ] Configurar checkout real (Hotmart/Kiwify) e plugar o link no CTA e nos 3 e-mails
-- [ ] VSL fica em segundo plano por enquanto (em andamento pelo usuário) — entra entre `.tip-box` e `.offer-card` no resultado do quiz (marcado no código)
+- [ ] VSL em andamento pelo usuário — entra entre `.tip-box` e `.offer-card` no resultado do quiz (marcado no código)
 - [ ] Gamma não conectou nesta sessão (timeout) — se o usuário quiser tentar usá-lo depois, reconectar via `/mcp`
 
 ---
