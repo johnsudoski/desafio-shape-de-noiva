@@ -41,70 +41,81 @@
   .eyebrow::before,.eyebrow::after{content:"";width:6px;height:6px;background:#c9a86a;border-radius:50%;}
 
   .photo-wrap{
-    position:absolute;left:50%;top:210px;transform:translateX(-50%);
-    width:920px;height:780px;z-index:2;
+    position:absolute;left:0;top:0;width:1080px;height:1080px;z-index:1;overflow:hidden;
   }
   .photo-wrap img{
-    width:100%;height:100%;object-fit:cover;object-position:50% 22%;
-    -webkit-mask-image:
-      linear-gradient(to bottom, black 45%, transparent 92%),
-      linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
-    -webkit-mask-composite:source-in;
-            mask-image:
-      linear-gradient(to bottom, black 45%, transparent 92%),
-      linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
-            mask-composite:intersect;
+    width:100%;height:100%;object-fit:cover;object-position:50% 30%;
+    filter:grayscale(1) contrast(1.15) brightness(.9);
+  }
+  .duotone{
+    position:absolute;inset:0;z-index:2;
+    background:#7a2e3b;
+    mix-blend-mode:color;
+  }
+  .duotone-multiply{
+    position:absolute;inset:0;z-index:2;
+    background:linear-gradient(180deg, rgba(23,13,14,0.42) 0%, rgba(23,13,14,0.5) 55%, rgba(23,13,14,0.97) 92%);
+  }
+  .photo-fade-bottom{
+    position:absolute;left:0;right:0;bottom:0;height:420px;z-index:3;
+    background:linear-gradient(180deg, transparent 0%, #170d0e 88%);
   }
 
   .badge-duration{
-    position:absolute;top:940px;left:50%;transform:translateX(-50%);z-index:6;
-    background:linear-gradient(90deg,#7a2e3b,#5e2029);color:#fdf7ee;
-    font-weight:800;font-size:23px;letter-spacing:.08em;white-space:nowrap;
-    padding:15px 38px;border-radius:99px;box-shadow:0 10px 30px rgba(122,46,59,0.5);
-    border:1.5px solid rgba(240,228,211,0.3);
+    position:absolute;top:900px;left:50%;transform:translateX(-50%);z-index:6;
+    background:#fdf7ee;color:#5e2029;
+    font-weight:800;font-size:24px;letter-spacing:.05em;white-space:nowrap;
+    padding:14px 34px 12px;box-shadow:0 12px 30px rgba(0,0,0,0.4);
   }
+  .badge-duration::before, .badge-duration::after{
+    content:"";position:absolute;top:0;width:0;height:0;
+    border-top:26px solid #fdf7ee;
+  }
+  .badge-duration::before{left:-22px;border-right:22px solid transparent;}
+  .badge-duration::after{right:-22px;border-left:22px solid transparent;}
 
   .title-wrap{
-    position:absolute;left:0;right:0;bottom:96px;z-index:5;text-align:center;padding:0 50px;
+    position:absolute;left:0;right:0;bottom:64px;z-index:5;text-align:center;padding:0 30px;
   }
   .title{
-    font-family:'Manrope',sans-serif;font-weight:800;font-size:92px;line-height:.98;
-    letter-spacing:-.01em;text-transform:uppercase;
-    background:linear-gradient(180deg,#fdf7ee 0%,#f0e4d3 35%,#c9a86a 100%);
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-    text-shadow:0 8px 40px rgba(0,0,0,0.5);
+    font-family:'Manrope',sans-serif;font-weight:800;font-size:128px;line-height:.92;
+    letter-spacing:-.03em;text-transform:uppercase;color:#fdf7ee;
     text-wrap:balance;
   }
-  .subtitle{
-    margin-top:20px;font-family:'Playfair Display',serif;font-style:italic;font-weight:600;
-    font-size:30px;color:#f0e4d3;
+  .title .accent{
+    background:linear-gradient(180deg,#f0d9a0 0%,#c9a86a 60%,#a8813f 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    display:block;
   }
+  .subtitle{
+    margin-top:26px;font-family:'Manrope',sans-serif;font-weight:700;
+    font-size:26px;letter-spacing:.04em;color:#e6d8c3;text-transform:uppercase;
+  }
+  .subtitle b{color:#c9a86a;}
 
-  .vignette{position:absolute;inset:0;z-index:3;
-    background:linear-gradient(180deg, rgba(23,13,14,0) 52%, rgba(23,13,14,0.4) 78%, rgba(23,13,14,0.78) 100%);
-    pointer-events:none;
+  .vignette{position:absolute;inset:0;z-index:3;pointer-events:none;
+    background:linear-gradient(180deg, rgba(23,13,14,0.25) 0%, transparent 18%);
   }
   .frame{position:absolute;inset:26px;border:1.5px solid rgba(240,228,211,0.18);z-index:7;pointer-events:none;}
 </style>
 </head>
 <body>
 <div class="cover">
-  <div class="petal p1"></div><div class="petal p2"></div><div class="petal p3"></div><div class="petal p4"></div>
-  <div class="sparkle s1"></div><div class="sparkle s2"></div><div class="sparkle s3"></div><div class="sparkle s4"></div>
-
-  <div class="eyebrow-wrap"><div class="eyebrow">Desafio</div></div>
-
   <div class="photo-wrap">
     <img src="images/noiva-buque-sorrindo.jpg" alt="Noiva feliz">
   </div>
-
+  <div class="duotone"></div>
+  <div class="duotone-multiply"></div>
+  <div class="photo-fade-bottom"></div>
   <div class="vignette"></div>
+
+  <div class="eyebrow-wrap"><div class="eyebrow">Desafio</div></div>
 
   <div class="badge-duration">21 DIAS PARA O GRANDE DIA</div>
 
   <div class="title-wrap">
-    <div class="title">Shape de<br>Noiva</div>
-    <div class="subtitle">Cardápio · Treino · Mentalidade</div>
+    <div class="title">Shape de<span class="accent">Noiva</span></div>
+    <div class="subtitle">Método completo: <b>Cardápio · Treino · Mentalidade</b></div>
   </div>
 
   <div class="frame"></div>
