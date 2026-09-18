@@ -59,15 +59,46 @@ isso teve que ser implementado (é mecânica, não copy):
 ## VSL (TELA 8)
 
 VSL gravada, no YouTube como **não listada**: https://youtu.be/PURqqLvsDjE
-(ID: `PURqqLvsDjE`)
+(ID: `PURqqLvsDjE`, duração real 8min06s)
 
 O briefing original especificava um `<video>` com arquivo próprio e
 `video.addEventListener('timeupdate', ...)` pra revelar o CTA aos 50%
 assistido. Como a VSL está no YouTube, isso foi **adaptado** (mesma
 mecânica, implementação diferente): embed via YouTube IFrame Player API
 (`onYouTubeIframeAPIReady` + `YT.Player`), com `setInterval` de 1s chamando
-`player.getCurrentTime()/getDuration()` pra checar o percentual assistido
-— efeito idêntico ao `timeupdate` original.
+`player.getCurrentTime()` pra checar o progresso.
+
+**Atualizado em 2026-09-18:** a regra de liberação do CTA mudou de "50% do
+vídeo assistido" pra um **tempo fixo — 4min30s (270s)**, por instrução
+direta do usuário ("ali que irá revelar a oferta se a pessoa realmente
+deseja"). Constante `VSL_LIBERA_CTA_EM_SEGUNDOS` no topo do bloco de VSL
+em `site/index.html`.
+
+**Importante — só funciona em http(s):** o embed do YouTube via IFrame API
+depende de comunicação entre páginas (postMessage) que não roda se o HTML
+for aberto direto do disco (`file://`). É por isso que o vídeo não
+aparecia em testes locais — resolvido publicando o site de verdade (ver
+seção Deploy abaixo).
+
+## Deploy — GitHub Pages (2026-09-18)
+
+Repositório: https://github.com/johnsudoski/desafio-shape-de-noiva
+(remote `desafio-shape-noiva` no mega-brain, publicado via
+`git subtree push --prefix=nexus/desafio-shape-noiva desafio-shape-noiva main`)
+
+Site ao vivo: **https://johnsudoski.github.io/desafio-shape-de-noiva/**
+
+Publicação automática via GitHub Actions
+(`.github/workflows/deploy-pages.yml`) — a cada push na branch `main` do
+repositório externo, a pasta `site/` é publicada no GitHub Pages. Pages
+configurado com `build_type: workflow` (fonte = Actions, não branch/pasta).
+
+**Vídeo não vai pro repositório:** `site/videos/*.mp4` está no
+`.gitignore` (raiz do mega-brain, reforçado em 2026-09-18 — a regra
+`!nexus/**` estava reabrindo o bloqueio geral de mídia pesada só dentro de
+`nexus/`). Sem problema, já que a VSL real vive no YouTube — o arquivo
+local em `site/videos/` é só uma cópia de backup, nunca foi referenciada
+pelo HTML.
 
 ## Checkout (TELA 9)
 
