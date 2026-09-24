@@ -356,11 +356,11 @@ h1, h2, h3 {
 
 <!-- ============================================================
      TELA 8 — VSL (VIDEO SALES LETTER)
-     VSL já gravada e no YouTube (não listada), 8min06s de duração:
-     https://youtu.be/PURqqLvsDjE — embed via IFrame API. O CTA final
-     fica ESCONDIDO até 4min30s (270s) de vídeo assistido — é o momento
-     em que a oferta é revelada pra quem realmente quer (2026-09-18,
-     substituiu a regra original de "50% assistido" do briefing).
+     VSL agora hospedada no Panda Video (trocado do YouTube em
+     2026-09-24). O CTA final fica ESCONDIDO até 4min30s (270s) de
+     vídeo assistido — é o momento em que a oferta é revelada pra
+     quem realmente quer (regra criada em 2026-09-18, substituiu a
+     regra original de "50% assistido" do briefing).
      ============================================================ -->
 <section id="vsl-section" class="tela">
   <div class="container">
@@ -370,7 +370,10 @@ h1, h2, h3 {
     </h2>
 
     <div class="video-wrapper">
-      <div id="vsl-player"></div>
+      <iframe id="panda-vsl-player"
+        src="https://player-vz-5322148b-a9e.tv.pandavideo.com.br/embed/?v=b5d3e8c5-9c33-4e7d-b6f9-9348fc782080"
+        style="border:0;width:100%;height:100%;"
+        allow="autoplay; fullscreen" allowfullscreen></iframe>
     </div>
 
     <div id="cta-vsl" class="cta-wrapper" style="display: none;">
@@ -385,7 +388,6 @@ h1, h2, h3 {
   </div>
 </section>
 
-<script src="https://www.youtube.com/iframe_api"></script>
 <script>
 /* =========================================================
    DESAFIO SHAPE DE NOIVA — Landing Page
@@ -560,36 +562,44 @@ function personalizarResultado() {
 }
 
 // ---------------------------------------------------------------
-// TELA 8 — VSL via YouTube IFrame API. O botão final fica escondido
-// até VSL_LIBERA_CTA_EM_SEGUNDOS de vídeo assistido (polling via
-// getCurrentTime(), já que o player do YouTube não tem um evento
-// nativo equivalente ao video.timeupdate de um <video> próprio).
+// TELA 8 — VSL via Panda Video Player API. O botão final fica
+// escondido até VSL_LIBERA_CTA_EM_SEGUNDOS de vídeo assistido.
+// Padrão de integração copiado literal da doc oficial da Panda
+// ("Como mostrar um conteúdo após determinado momento?", help.pandavideo.com)
+// — carrega a api.v2.js sob demanda e escuta o evento panda_timeupdate
+// (diferente do YouTube, não precisa de polling manual com setInterval).
 // ---------------------------------------------------------------
-let vslPlayer;
+const PANDA_IFRAME_ID = 'panda-vsl-player';
+const PANDA_API_ENDPOINT = 'https://player.pandavideo.com.br/api.v2.js';
 let vslCtaLiberado = false;
 
-function onYouTubeIframeAPIReady() {
-  vslPlayer = new YT.Player('vsl-player', {
-    videoId: 'PURqqLvsDjE',
-    playerVars: { rel: 0, modestbranding: 1 },
-    events: { onReady: () => setInterval(checarProgressoVSL, 1000) },
-  });
-}
-
-// CTA liberado num tempo fixo do vídeo (não mais % assistido) — 4min30s
-// (270s), momento em que a VSL revela a oferta pra quem realmente quer.
+// CTA liberado num tempo fixo do vídeo — 4min30s (270s), momento em que
+// a VSL revela a oferta pra quem realmente quer.
 const VSL_LIBERA_CTA_EM_SEGUNDOS = 270;
 
-function checarProgressoVSL() {
-  if (!vslPlayer || typeof vslPlayer.getCurrentTime !== 'function' || vslCtaLiberado) return;
-
-  if (vslPlayer.getCurrentTime() >= VSL_LIBERA_CTA_EM_SEGUNDOS) {
-    vslCtaLiberado = true;
-    const ctaButton = document.getElementById('cta-vsl');
-    ctaButton.style.display = 'block';
-    ctaButton.classList.add('fade-in');
-  }
+if (!document.querySelector(`script[src='${PANDA_API_ENDPOINT}']`)) {
+  const s = document.createElement('script');
+  s.src = PANDA_API_ENDPOINT;
+  s.async = true;
+  document.head.appendChild(s);
 }
+
+window.pandascripttag = window.pandascripttag || [];
+window.pandascripttag.push(function () {
+  const p = new PandaPlayer(PANDA_IFRAME_ID, {
+    onReady() {
+      p.onEvent((e) => {
+        if (e.message !== 'panda_timeupdate' || vslCtaLiberado) return;
+        if (e.currentTime >= VSL_LIBERA_CTA_EM_SEGUNDOS) {
+          vslCtaLiberado = true;
+          const ctaButton = document.getElementById('cta-vsl');
+          ctaButton.style.display = 'block';
+          ctaButton.classList.add('fade-in');
+        }
+      });
+    },
+  });
+});
 
 // TELA 9 — Oferta + Checkout: o botão final da VSL leva direto pro
 // checkout da Ticto (briefing não detalha uma tela própria de oferta
