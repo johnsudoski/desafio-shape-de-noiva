@@ -58,27 +58,34 @@ isso teve que ser implementado (é mecânica, não copy):
 
 ## VSL (TELA 8)
 
-VSL gravada, no YouTube como **não listada**: https://youtu.be/PURqqLvsDjE
-(ID: `PURqqLvsDjE`, duração real 8min06s)
+**Atualizado em 2026-09-24:** VSL migrou do YouTube pra **Panda Video**
+(plataforma de vídeo dedicada a VSL de funil — sem vídeos relacionados,
+métricas de retenção melhores). Embed atual:
+`https://player-vz-5322148b-a9e.tv.pandavideo.com.br/embed/?v=b5d3e8c5-9c33-4e7d-b6f9-9348fc782080`
 
-O briefing original especificava um `<video>` com arquivo próprio e
-`video.addEventListener('timeupdate', ...)` pra revelar o CTA aos 50%
-assistido. Como a VSL está no YouTube, isso foi **adaptado** (mesma
-mecânica, implementação diferente): embed via YouTube IFrame Player API
-(`onYouTubeIframeAPIReady` + `YT.Player`), com `setInterval` de 1s chamando
-`player.getCurrentTime()` pra checar o progresso.
+Integração via **Panda Player API oficial** (`api.v2.js` + evento
+`panda_timeupdate`), copiada literal da documentação deles
+(help.pandavideo.com, artigo "Como mostrar um conteúdo após determinado
+momento?"). Diferente do YouTube, o Panda dispara o evento sozinho — não
+precisou mais de `setInterval`/polling manual.
+
+Histórico: o briefing original especificava um `<video>` com arquivo
+próprio e `video.addEventListener('timeupdate', ...)`. Passou primeiro
+pelo YouTube (2026-09-18, `onYouTubeIframeAPIReady` + `YT.Player` com
+polling via `getCurrentTime()`), depois pro Panda Video (2026-09-24,
+atual). Mesma regra de negócio o tempo todo: CTA some até
+`VSL_LIBERA_CTA_EM_SEGUNDOS` (constante no topo do bloco de VSL em
+`site/index.html`).
 
 **Atualizado em 2026-09-18:** a regra de liberação do CTA mudou de "50% do
 vídeo assistido" pra um **tempo fixo — 4min30s (270s)**, por instrução
 direta do usuário ("ali que irá revelar a oferta se a pessoa realmente
-deseja"). Constante `VSL_LIBERA_CTA_EM_SEGUNDOS` no topo do bloco de VSL
-em `site/index.html`.
+deseja").
 
-**Importante — só funciona em http(s):** o embed do YouTube via IFrame API
-depende de comunicação entre páginas (postMessage) que não roda se o HTML
-for aberto direto do disco (`file://`). É por isso que o vídeo não
-aparecia em testes locais — resolvido publicando o site de verdade (ver
-seção Deploy abaixo).
+**Importante — só funciona em http(s):** tanto o YouTube quanto o Panda
+dependem de comunicação entre páginas (postMessage) que não roda se o
+HTML for aberto direto do disco (`file://`). Testar sempre pela URL
+publicada (ver seção Deploy abaixo), nunca abrindo o arquivo local.
 
 ## Deploy — GitHub Pages (2026-09-18)
 
