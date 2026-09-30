@@ -111,9 +111,31 @@ pelo HTML.
 
 O briefing não detalha uma tela própria de "oferta" — o botão final da VSL
 ("QUERO MEU SHAPE DE NOIVA AGORA") já é o CTA que leva direto pro
-checkout. Implementado com `TICTO_CHECKOUT_URL` (mesmo padrão de
-placeholder já usado no projeto) — **ainda com placeholder
-`COLE_AQUI_O_LINK_DO_CHECKOUT_TICTO`, precisa do link real da Ticto**.
+checkout. Implementado com `TICTO_CHECKOUT_URL`.
+
+**Atualizado em 2026-09-30:** link real em produção —
+`https://payment.ticto.app/O1A5BBEB0`.
+
+## Meta Pixel (2026-09-30)
+
+Pixel ID `1567688661281812` instalado no `<head>` (client-side, código
+base oficial da Meta). Eventos disparados via `dispararPixel()`:
+- `PageView` — automático, ao carregar a página
+- `Lead` — quando o resultado personalizado é revelado (TELA 7)
+- `InitiateCheckout` — ao clicar no CTA final da VSL, antes de navegar
+  pro checkout (`value: 47.90, currency: 'BRL'`)
+
+**Conversions API (server-side) NÃO configurada aqui de propósito.** O
+usuário também forneceu um access token do Graph API pra isso, mas esse
+token é uma credencial real — o repositório `desafio-shape-de-noiva` é
+**público** no GitHub, então qualquer coisa commitada no HTML fica
+exposta (view-source ou histórico do git, pra sempre). Recomendado ao
+usuário configurar CAPI direto no painel da Ticto (eles processam a
+compra e podem disparar o evento server-side com o token guardado com
+segurança no backend deles) em vez de expor o token no site estático.
+Se um dia quiser CAPI rodando do lado do site mesmo, precisa de infra de
+backend/serverless própria pra guardar o token em segredo — não é só
+colar código num arquivo estático.
 
 ## Imagens — antes/depois
 
@@ -175,6 +197,8 @@ não uma recomendação deste projeto.
 
 ## Pendências de integração
 
-1. **`TICTO_CHECKOUT_URL`** (topo do `<script>`) — link real da Ticto
-2. **4 imagens de antes/depois** (placeholders no lugar) — fotos próprias/licenciadas
-3. **Lead capture** — não existe no fluxo atual; avaliar se quer adicionar
+1. ~~`TICTO_CHECKOUT_URL`~~ — ✅ resolvido 2026-09-30
+2. ~~4 imagens de antes/depois~~ — ✅ resolvido 2026-09-24
+3. ~~Meta Pixel~~ — ✅ resolvido 2026-09-30 (só client-side — ver seção acima)
+4. **Conversions API (server-side)** — configurar direto no painel da Ticto, não no site (ver seção "Meta Pixel" acima)
+5. **Lead capture** — não existe no fluxo atual; avaliar se quer adicionar
