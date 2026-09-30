@@ -5,6 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Desafio Shape de Noiva — 21 Dias</title>
 <meta name="description" content="Descubra em 60 segundos se o Método Shape de Noiva é para você.">
+
+<!-- Meta Pixel (client-side, só o Pixel ID — que é público por natureza).
+     NÃO colocar o access token da Conversions API aqui: este repositório
+     é público no GitHub, então qualquer credencial neste arquivo fica
+     exposta pra qualquer pessoa (view-source ou histórico do git).
+     Se quiser Conversions API (eventos server-side com o token), a Ticto
+     provavelmente tem um campo próprio de Pixel/CAPI nas configurações
+     do produto — o token fica seguro no backend deles. -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1567688661281812');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1567688661281812&ev=PageView&noscript=1"
+/></noscript>
+<!-- Fim Meta Pixel -->
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -396,9 +421,16 @@ h1, h2, h3 {
    respostas em cards clicáveis.
    ========================================================= */
 
-// Checkout Ticto — mesmo padrão de placeholder já usado no projeto.
-// TROCAR pelo link real assim que estiver criado na Ticto.
-const TICTO_CHECKOUT_URL = 'COLE_AQUI_O_LINK_DO_CHECKOUT_TICTO';
+// Checkout Ticto — link real (2026-09-30).
+const TICTO_CHECKOUT_URL = 'https://payment.ticto.app/O1A5BBEB0';
+
+// Dispara evento do Meta Pixel com segurança — ad blocker costuma
+// bloquear o fbevents.js, então sempre confere se fbq existe antes.
+function dispararPixel(evento, params) {
+  if (typeof fbq === 'function') {
+    fbq('track', evento, params || {});
+  }
+}
 
 const respostas = {};
 
@@ -535,6 +567,9 @@ function iniciarResultado() {
     document.getElementById('loading-screen').style.display = 'none';
     document.getElementById('resultado-container').style.display = 'block';
     document.getElementById('resultado-container').classList.add('fade-in');
+    // Lead: ela completou o quiz e chegou no resultado personalizado —
+    // sinal de intenção real pro Meta otimizar a entrega dos anúncios.
+    dispararPixel('Lead');
   }, 3000);
 }
 
@@ -606,6 +641,10 @@ window.pandascripttag.push(function () {
 // além deste botão — é o que está especificado no fluxo).
 function irParaCheckout() {
   if (TICTO_CHECKOUT_URL && !TICTO_CHECKOUT_URL.includes('COLE_AQUI')) {
+    // InitiateCheckout: ela assistiu a VSL até o ponto de revelação da
+    // oferta e clicou pra comprar — o evento de maior intenção que
+    // rastreamos aqui (a Compra em si acontece do lado da Ticto).
+    dispararPixel('InitiateCheckout', { value: 47.90, currency: 'BRL' });
     window.location.href = TICTO_CHECKOUT_URL;
   } else {
     alert('Aqui entra o link real do checkout da Ticto — trocar TICTO_CHECKOUT_URL no topo do <script>.');
