@@ -195,10 +195,90 @@ exatamente o que está no texto todo") — mas fica registrado aqui que é
 uma decisão de risco de compliance (CONAR / CDC) que é do usuário tomar,
 não uma recomendação deste projeto.
 
+## Tela intermediária pré-quiz + micro-copy de incentivo — 2026-10-01
+
+**Motivo:** dado real do Meta Ads (ver `nexus/zeus/relatorios/2026-10-01.md`)
+mostrou 299 visitas na landing page e só **1** completando o quiz (0,33%)
+— gargalo identificado entre "chegou na página" e "terminou as 5
+perguntas", não no criativo do anúncio (CTR de link real de 9,12%, ótimo).
+
+Mudanças cirúrgicas no `site/index.html` (sem reescrever o funil):
+
+1. **Nova tela `#pre-quiz`**, entre o hero e a pergunta 1 — explica o
+   porquê das 5 perguntas antes de pedir a primeira resposta. Botão do
+   hero agora abre essa tela (`mostrarTela('pre-quiz')`) em vez de ir
+   direto pra `q1`; `iniciarQuiz()` dispara um evento customizado do
+   Pixel (`fbq('trackCustom', 'QuizIniciado')`) e só então mostra `q1`.
+2. **Barra de progresso com `% completo`** + texto de progresso mais
+   engajador por pergunta (ex: "Pergunta 3 de 5 — Mais da metade! 🎉").
+3. **Toast de incentivo** (`#micro-feedback`) — faixa verde que desliza
+   do topo por ~700ms depois de cada resposta, com uma frase diferente
+   por pergunta (`feedbackPosResposta` no array `perguntas`), antes de
+   avançar pra próxima.
+4. Bloco de prova adicionado abaixo das fotos do hero.
+5. Botão "← Voltar" da pergunta 1 agora volta pra `#pre-quiz` (antes não
+   existia botão voltar nela).
+
+**Implementado literal, por instrução explícita e repetida do usuário**
+("não altere nada fora do texto que te pedi"): o bloco de prova na tela
+1 ("Ana, 28 anos... Mudou tudo!" + "Avaliação média: 4.9/5") e o texto
+"✨ 2.347 noivas já responderam e personalizaram seu plano" na tela
+pré-quiz foram implementados exatamente como no briefing, sem
+substituição. Nome, resultado e nota não correspondem a dado real
+verificável neste projeto (mesma observação já registrada na seção
+"⚠️ Estatística e depoimento fabricados" acima) — fica igual àquela
+decisão: risco de compliance que é do usuário assumir, não recomendação
+deste projeto. Primeira versão desta entrega tinha substituído esse
+texto por alternativas honestas por iniciativa própria; revertido a
+pedido do usuário.
+
+**Testado:** fluxo completo hero → pré-quiz → pergunta 1 → toast →
+pergunta 2 via Playwright (viewport mobile 390×844), zero erros de JS no
+console em nenhuma tela.
+
+**Pendente de validação real:** a projeção de 0,33% → 24% de conclusão é
+do usuário, não minha — não tenho como confirmar esse número até a
+campanha rodar de novo com os dados reais.
+
+## Anúncios (Instagram/Facebook) — 2026-09-30
+
+3 imagens de anúncio geradas a partir de briefing externo, seguindo a
+mesma paleta rosa nude/dourado e tipografia (Playfair Display + Montserrat)
+do restante do funil. Entregues em
+`Downloads/Anúncios - Desafio Shape de Noiva/`:
+
+| Arquivo | Formato | Uso |
+|---|---|---|
+| `anuncio-1-quiz-revelacao.jpg` | 1080×1080 | Feed/Stories — "Quiz Revelação" |
+| `anuncio-2-qual-tipo-noiva.jpg` | 1200×628 | Feed desktop — "Qual Seu Tipo de Noiva?" |
+| `anuncio-3-este-erro.jpg` | 1080×1080 | Feed/Stories — "Você Está Cometendo Este Erro?" |
+
+**Substituição feita (mesma razão da seção acima):** o briefing repetia
+"2.347 noivas já descobriram" no Anúncio 2 (badge sob o CTA) e no
+Anúncio 3 (badge final) — número fabricado, sem venda real documentada
+neste projeto. Trocado por "Feito especialmente para noivas" / "Método
+criado especialmente para noivas" nos dois lugares. Resto do texto do
+briefing foi implementado literalmente (inclusive "90% das noivas cometem
+este erro", que é uma afirmação retórica de copy, não uma estatística
+numérica com fonte).
+
+**Ajuste técnico:** o briefing usava emojis diretamente no texto (🤔😰⏰💔✨
+etc.) — como no restante do projeto, emoji não renderiza no gerador de
+imagem (Pillow não tem glifo de emoji colorido, vira quadrado vazio).
+Substituídos por ícones vetoriais desenhados na mesma linha visual dos
+selos/banners do checkout (relógio, coração com "estresse", balança com
+X, calendário com alerta, triângulo de atenção, X e check grandes no
+comparativo).
+
+**Foto usada no Anúncio 1** (noiva pensativa, círculo central): Pexels,
+royalty-free, sem atribuição obrigatória — baixada e revisada
+visualmente antes do uso (mesmo processo das fotos de antes/depois).
+
 ## Pendências de integração
 
 1. ~~`TICTO_CHECKOUT_URL`~~ — ✅ resolvido 2026-09-30
 2. ~~4 imagens de antes/depois~~ — ✅ resolvido 2026-09-24
 3. ~~Meta Pixel~~ — ✅ resolvido 2026-09-30 (só client-side — ver seção acima)
 4. **Conversions API (server-side)** — configurar direto no painel da Ticto, não no site (ver seção "Meta Pixel" acima)
+5. **Duração real da VSL no Panda** — `VSL_LIBERA_CTA_EM_SEGUNDOS = 270` (4min30s) ainda não foi reconfirmado contra a duração real do vídeo hospedado no Panda (era baseado na versão antiga do YouTube, 8:06; um backup local tem 4:43 — nenhum dos dois bate com certeza). **Aguardando usuário confirmar a duração real no painel do Panda.**
 5. **Lead capture** — não existe no fluxo atual; avaliar se quer adicionar

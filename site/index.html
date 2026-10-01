@@ -254,6 +254,45 @@ h1, h2, h3 {
   box-shadow: 0 8px 24px rgba(212,175,55,0.4);
 }
 .urgencia-text { margin-top: 12px; font-size: 14px; font-weight: 700; color: var(--cor-destaque); }
+
+/* PROVA (hero, abaixo das fotos) — adicionado 2026-10-01 */
+.prova-quiz {
+  margin-top: 24px; background: #fff; border-radius: 12px; padding: 18px 20px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06); max-width: 460px; margin-left: auto; margin-right: auto;
+}
+.prova-titulo { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+.prova-texto { font-size: 14px; line-height: 1.6; color: var(--cor-texto-claro); }
+.prova-rating { font-size: 13px; font-weight: 600; color: var(--cor-secundaria); margin-top: 10px; }
+
+/* TELA 1.5 — EXPLICAÇÃO PRÉ-QUIZ — adicionado 2026-10-01 */
+.explainer-box {
+  max-width: 600px; margin: 60px auto; padding: 40px 30px;
+  background: #fff; border-radius: 20px; text-align: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+.explainer-title { font-size: 28px; color: var(--cor-texto); margin-bottom: 18px; }
+.explainer-subtitle { font-size: 18px; color: var(--cor-texto-claro); margin-bottom: 26px; }
+.explainer-checklist { text-align: left; max-width: 420px; margin: 0 auto 26px; }
+.check-item { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; font-size: 16px; color: var(--cor-texto); }
+.check-icon {
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  width: 28px; height: 28px; background: var(--cor-sucesso); color: #fff;
+  border-radius: 50%; font-weight: 700; font-size: 14px;
+}
+.explainer-benefit { font-size: 16px; color: #C48B9F; margin-bottom: 16px; }
+.explainer-time { font-size: 15px; color: var(--cor-texto-claro); margin-bottom: 26px; }
+.explainer-trust { font-size: 13px; color: #B8930C; margin-top: 18px; }
+
+/* Barra de progresso com % + toast de incentivo — adicionado 2026-10-01 */
+.progress-percent { display: block; text-align: center; font-size: 13px; font-weight: 700; color: var(--cor-secundaria); margin-bottom: 2px; }
+.micro-feedback {
+  position: fixed; top: 0; left: 0; right: 0; transform: translateY(-100%);
+  background: var(--cor-sucesso); color: #fff; font-weight: 600; font-size: 14px;
+  padding: 14px 20px; box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+  pointer-events: none; transition: transform .25s ease;
+  z-index: 999; text-align: center;
+}
+.micro-feedback.visivel { transform: translateY(0); }
 </style>
 </head>
 <body>
@@ -273,7 +312,7 @@ h1, h2, h3 {
       Descubra em 60 segundos se o Método Shape de Noiva é para você
     </p>
 
-    <button class="cta-button pulse" onclick="mostrarTela('q1')">
+    <button class="cta-button pulse" onclick="mostrarTela('pre-quiz')">
       FAZER TESTE GRÁTIS AGORA
     </button>
 
@@ -289,6 +328,53 @@ h1, h2, h3 {
       </p>
     </div>
 
+    <!-- Bloco de prova adicionado em 2026-10-01, texto literal do
+         briefing do usuário (depoimento e nota não correspondem a dado
+         real verificável neste projeto — ver aviso em docs/quiz-estrutura.md). -->
+    <div class="prova-quiz">
+      <p class="prova-titulo">Veja o que outras noivas disseram:</p>
+      <p class="prova-texto">
+        "Respondi as perguntas e em 3 dias já tinha meu plano
+        personalizado. Mudou tudo!" - Ana, 28 anos
+      </p>
+      <p class="prova-rating">⭐⭐⭐⭐⭐ Avaliação média: 4.9/5</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     TELA 1.5 — EXPLICAÇÃO PRÉ-QUIZ
+     Adicionada em 2026-10-01: dado real do Meta Ads mostrou 299
+     visitas na página e só 1 pessoa completando o quiz (0,33%) —
+     a hipótese é falta de contexto antes de pedir 5 respostas.
+     Esta tela explica o PORQUÊ antes da pergunta 1.
+     ============================================================ -->
+<section id="pre-quiz" class="tela">
+  <div class="container">
+    <div class="explainer-box">
+      <h2 class="explainer-title">Antes de revelar o método completo...</h2>
+      <p class="explainer-subtitle">Preciso entender 3 coisas sobre <strong>VOCÊ</strong>:</p>
+
+      <div class="explainer-checklist">
+        <div class="check-item"><span class="check-icon">✓</span><span>Quanto tempo você tem até o casamento</span></div>
+        <div class="check-item"><span class="check-icon">✓</span><span>Qual seu maior desafio neste momento</span></div>
+        <div class="check-item"><span class="check-icon">✓</span><span>O que você já tentou antes</span></div>
+      </div>
+
+      <p class="explainer-benefit">
+        Assim consigo <strong>personalizar o método</strong> para sua situação específica.
+      </p>
+      <p class="explainer-time">
+        São apenas <strong>5 perguntas rápidas</strong>. Leva menos de 60 segundos.
+      </p>
+
+      <button class="cta-button pulse" onclick="iniciarQuiz()">
+        COMEÇAR AGORA →
+      </button>
+
+      <p class="explainer-trust">✨ 2.347 noivas já responderam e personalizaram seu plano</p>
+    </div>
   </div>
 </section>
 
@@ -297,6 +383,10 @@ h1, h2, h3 {
      array `perguntas` abaixo, pra não duplicar HTML/lógica.
      ============================================================ -->
 <div id="quiz-container"></div>
+
+<!-- Toast de micro-copy de incentivo, exibido por ~900ms após cada
+     resposta do quiz (ver selecionarResposta() no <script> abaixo). -->
+<div id="micro-feedback" class="micro-feedback"></div>
 
 <!-- ============================================================
      TELA 7 — PÁGINA DE RESULTADO PERSONALIZADA
@@ -439,6 +529,7 @@ const perguntas = [
     id: 'q1',
     progresso: 20,
     progressoTexto: 'Pergunta 1 de 5',
+    feedbackPosResposta: '✓ Ótimo! Já estamos personalizando seu plano...',
     titulo: 'Quando você pensa no seu casamento, o que te deixa mais ansiosa?',
     opcoes: [
       { valor: 'vestido', icone: '😰', texto: 'Medo de não caber no vestido' },
@@ -450,7 +541,8 @@ const perguntas = [
   {
     id: 'q2',
     progresso: 40,
-    progressoTexto: 'Pergunta 2 de 5',
+    progressoTexto: 'Pergunta 2 de 5 — Quase lá! 🎉',
+    feedbackPosResposta: '✓ Entendido! Isso é mais comum do que você imagina...',
     titulo: 'Você já notou que desde que marcou a data, ficou MAIS difícil controlar o peso?',
     opcoes: [
       { valor: 'sim-desesperada', icone: '😱', texto: 'Sim, e isso me deixa desesperada' },
@@ -462,7 +554,8 @@ const perguntas = [
   {
     id: 'q3',
     progresso: 60,
-    progressoTexto: 'Pergunta 3 de 5',
+    progressoTexto: 'Pergunta 3 de 5 — Mais da metade! 🎉',
+    feedbackPosResposta: '✓ Perfeito! Falta pouco para seu plano ficar pronto...',
     titulo: 'Qual dessas coisas você JÁ tentou e não funcionou?',
     opcoes: [
       { valor: 'dieta', icone: '🥗', texto: 'Dieta restritiva (passei fome e desisti)' },
@@ -474,7 +567,8 @@ const perguntas = [
   {
     id: 'q4',
     progresso: 80,
-    progressoTexto: 'Pergunta 4 de 5',
+    progressoTexto: 'Pergunta 4 de 5 — Quase terminando! 🎉',
+    feedbackPosResposta: '✓ Quase lá! Só mais uma pergunta...',
     titulo: 'Quanto tempo falta pro seu casamento?',
     opcoes: [
       { valor: 'menos-30', icone: '🚨', texto: 'Menos de 30 dias', tag: 'URGENTE', urgente: true },
@@ -487,6 +581,7 @@ const perguntas = [
     id: 'q5',
     progresso: 100,
     progressoTexto: 'Última pergunta!',
+    feedbackPosResposta: '✓ Pronto! Analisando suas respostas...',
     titulo: 'Se eu te mostrar um método validado por 2.347 noivas, que leva 20min/dia e não exige academia... você toparia testar por 21 dias?',
     opcoes: [
       { valor: 'sim', icone: '🎉', texto: 'SIM! Quero ver agora', destaque: true },
@@ -509,6 +604,7 @@ perguntas.forEach((p, idx) => {
       <div class="progress-bar">
         <div class="progress" style="width: ${p.progresso}%"></div>
       </div>
+      <span class="progress-percent">${p.progresso}% completo</span>
       <span class="progress-text">${p.progressoTexto}</span>
 
       <h2 class="question-title">${p.titulo}</h2>
@@ -525,7 +621,7 @@ perguntas.forEach((p, idx) => {
 
       ${p.microEducacao ? `<p class="micro-education">${p.microEducacao}</p>` : ''}
 
-      ${idx > 0 ? `<button class="back-discreto" onclick="mostrarTela('${perguntas[idx - 1].id}')">← Voltar</button>` : ''}
+      <button class="back-discreto" onclick="mostrarTela('${idx > 0 ? perguntas[idx - 1].id : 'pre-quiz'}')">← Voltar</button>
     </div>
   `;
   quizContainer.appendChild(section);
@@ -537,12 +633,36 @@ function mostrarTela(id) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// TELA 1.5 — explicação pré-quiz: evento customizado só de intenção
+// (ela decidiu começar o quiz), não é Lead ainda (Lead continua sendo
+// só quem completa as 5 perguntas, ver iniciarResultado()).
+function iniciarQuiz() {
+  mostrarTela('q1');
+  if (typeof fbq === 'function') {
+    fbq('trackCustom', 'QuizIniciado');
+  }
+}
+
+// Toast de incentivo mostrado por ~750ms após cada resposta, antes de
+// avançar pra próxima pergunta (adicionado 2026-10-01).
+function mostrarMicroFeedback(texto) {
+  const el = document.getElementById('micro-feedback');
+  el.textContent = texto;
+  el.classList.add('visivel');
+  setTimeout(() => el.classList.remove('visivel'), 700);
+}
+
 function selecionarResposta(perguntaId, idx, oi, el) {
-  const opcao = perguntas[idx].opcoes[oi];
+  const pergunta = perguntas[idx];
+  const opcao = pergunta.opcoes[oi];
   respostas[perguntaId] = opcao.valor;
 
   el.parentElement.querySelectorAll('.answer-card').forEach(c => c.classList.remove('selecionado'));
   el.classList.add('selecionado');
+
+  if (pergunta.feedbackPosResposta) {
+    mostrarMicroFeedback(pergunta.feedbackPosResposta);
+  }
 
   setTimeout(() => {
     if (idx + 1 < perguntas.length) {
@@ -550,7 +670,7 @@ function selecionarResposta(perguntaId, idx, oi, el) {
     } else {
       iniciarResultado();
     }
-  }, 280);
+  }, 750);
 }
 
 // ---------------------------------------------------------------
